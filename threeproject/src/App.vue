@@ -1,15 +1,26 @@
 <template>
   <div id="app">
-    <nav>
+    <!-- <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </nav>
-    <router-view/>
+    <router-view/> -->
+    <Order></Order>
   </div>
 </template>
+<script>
+  import Order from '@/views/OrderManagment.vue'
 
+
+  export default{
+    name: 'App',
+    components: {
+      Order
+    }
+  }
+</script>
 <style>
-#app {
+/* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -28,5 +39,10 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+} */
+a.nav_active{
+    background-color: #409EFF; 
+    color: white;
 }
+
 </style>
