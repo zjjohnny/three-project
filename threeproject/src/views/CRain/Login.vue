@@ -10,7 +10,7 @@
         <!-- 头部 -->
         <div class="herder-box">
           <div class="head-portrait">
-            <img src="../assets/images/headerPic.png" />
+            <img src="../../assets/images/headerPic.png" />
           </div>
           <div class="system-box">
             <div class="ch">后台管理系统</div>
@@ -20,11 +20,11 @@
         <!-- 输入框 -->
         <div class="input-box">
           <div class="account-password-box">
-            <img src="../assets/images/accountPic.png" />
+            <img src="../../assets/images/accountPic.png" />
             <input type="text" placeholder="请输入账号" v-model="account" />
           </div>
           <div class="account-password-box">
-            <img src="../assets/images/passwordPic.png" />
+            <img src="../../assets/images/passwordPic.png" />
             <input type="text" placeholder="请输入密码" v-model="password" />
           </div>
         </div>
@@ -43,7 +43,7 @@
         <div>科技推动进步</div>
         <div class="last-box">后台管理方便快捷</div>
       </div>
-      <img src="../assets/images/loginBgcPic.png" />
+      <img src="../../assets/images/loginBgcPic.png" />
     </div>
   </div>
 </template>
