@@ -3,9 +3,11 @@
         <div class="order-mgt-title">
             <div>订单管理</div>
         </div>
-        <OrderNav></OrderNav>
-        <OrderSearch></OrderSearch>
-        <router-view></router-view>
+        <div class="order-mgt-container">
+            <OrderNav></OrderNav>
+            <OrderSearch></OrderSearch>
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
@@ -17,6 +19,11 @@ export default{
     components: {
         OrderNav,
         OrderSearch
+    },
+    data(){
+        return {
+            
+        }
     }
 }
 </script>
@@ -33,12 +40,9 @@ export default{
         font-weight: 400;
         margin-bottom: 20px;
     }
-    .active{
-        background-color: #409EFF;
-        color: white;
-    }
-    nav a.router-link-exact-active {
-        color: #42b983;
+
+    a.nav_active{
+    background-color: #409EFF; 
     }
     .el-input__inner{
         height: 32px;

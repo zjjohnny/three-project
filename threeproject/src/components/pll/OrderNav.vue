@@ -1,17 +1,20 @@
 <template>
     <div>
         <ul class="orderNav">
+            <li @click="changeClass(0)"> 
+              <router-link to="/GoodsItem?title=所有订单" active-class="nav_active">所有订单</router-link>
+            </li>
+            <!-- // <li>
+            //   <router-link :to="{
+            //     path: '/GoodsItem',
+            //     query: {title:'待付款'}
+            //   }" active-class="nav_active">待付款</router-link>
+            // </li> -->
             <li>
-              <router-link to="/GoodsItem" active-class="nav_active">所有订单</router-link>
+              <router-link to="/GoodsItem?id=待发货" active-class="nav_active">待发货</router-link>
             </li>
             <li>
-              <router-link to="/home" active-class="nav_active">待付款</router-link>
-            </li>
-            <li>
-              <router-link to="/about" active-class="nav_active">待发货</router-link>
-            </li>
-            <li>
-              <router-link to="/about" active-class="nav_active">待收货</router-link>
+              <router-link to="/GoodsItem?state=待收货" active-class="nav_active">待收货</router-link>
             </li>
             <li>
               <router-link to="/about" active-class="nav_active">待评价</router-link>
@@ -29,26 +32,34 @@
 <script>
 export default{
     name: 'OrderNav',
+    date(){
+      return{
+        
+      }
+    },
+    methods:{
+      
+    }
 }
 </script>
 
 <style scoped>
     ul{
-        margin: 0 auto;
+        margin: 0 135px;
         width: 90%;
         padding: 0;
-        height: 60px;
+        height: 42px;
         display: flex;
-        justify-content: center;
+        margin-bottom: 10px;
     }
     ul li{
         display: inline-block;
         list-style: none;
-        background-color: white;
+        background-color: #aad2fa;
     }
     ul li a{
         display: inline-block;
-        color: black;
+        color: white;
         text-decoration: none;
         height: 30px;
         width: 100px;
@@ -56,6 +67,8 @@ export default{
         text-align: center;
         padding: 5px 10px;
         border:1px solid #DCDFE6;
-        margin-right: 1px;
     }
+    .a.nav_active{
+    background-color: #409EFF; 
+}
 </style>

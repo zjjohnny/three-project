@@ -5,18 +5,22 @@
       <router-link to="/about">About</router-link>
     </nav>
     <router-view/> -->
-    <Order></Order>
+    <!-- <Order></Order> -->
+    <Refund></Refund>
   </div>
 </template>
 <script>
   import Order from '@/views/OrderManagment.vue'
+  import Refund from '@/views/RefundManagment.vue'
 
 
   export default{
     name: 'App',
     components: {
-      Order
-    }
+      Order,
+      Refund
+    },
+    
   }
 </script>
 <style>
@@ -42,7 +46,6 @@ nav a.router-link-exact-active {
 } */
 a.nav_active{
     background-color: #409EFF; 
-    color: white;
 }
 
 </style>
