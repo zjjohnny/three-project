@@ -1,0 +1,16 @@
+{
+  "id": "3622924",
+  "name": "300project",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5776867",
+      "name": "success",
+      "font_class": "success",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    }
+  ]
+}
