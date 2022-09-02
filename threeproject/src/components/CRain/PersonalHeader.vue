@@ -5,19 +5,23 @@
     <!-- 当前页标题 -->
     <div class="personal-data" v-if="personal">个人资料</div>
     <div class="security-setting" v-if="security">安全设置</div>
-    <div class="security-setting" v-if="modify">修改手机</div>
+    <div class="security-setting" v-if="mphone">修改手机</div>
+    <div class="security-setting" v-if="mpassword">修改密码</div>
+    <div class="security-setting" v-if="opwd || newpwd">找回密码</div>
     <!-- 点击跳转的页面 -->
     <div class="jump-box">
       <img
         src="../../assets/images/accountPic.png"
         v-if="security || personal"
       />
-      <router-link to="{path:'SecuritySetting'}">
+      <router-link to='/SecuritySetting'>
         <span v-if="personal">安全设置</span>
       </router-link>
-
       <span v-if="security" @click="goToPersonalData">个人资料</span>
-      <span v-if="modify" @click="goToLogin" class="login-btn">登陆</span>
+      <span v-if="mphone || opwd || newpwd" @click="goToLogin" class="font-size-color">登陆</span>
+      <span v-if="mpassword" @click="goToHomePage" class="font-size-color"
+        >返回首页</span
+      >
     </div>
   </div>
 </template>
@@ -36,7 +40,7 @@ export default {
     /* 跳转到安全设置页 */
     flushCom() {
       console.log("goToLoginPage");
-      this.$router.go(0)
+      this.$router.go(0);
     },
     /* 跳转到个人资料页 */
     goToPersonalData() {
@@ -46,6 +50,10 @@ export default {
     goToLogin() {
       console.log("goToLoginPage");
     },
+    /* 跳转到首页 */
+    /* goToHomePage(){
+      console.log('goToHomePage');
+    } */
   },
   props: {
     security: {
@@ -56,7 +64,19 @@ export default {
       type: Boolean,
       default: false,
     },
-    modify: {
+    mphone: {
+      type: Boolean,
+      default: false,
+    },
+    mpassword: {
+      type: Boolean,
+      default: false,
+    },
+    opwd: {
+      type: Boolean,
+      default: false,
+    },
+    newpwd: {
       type: Boolean,
       default: false,
     },
@@ -104,7 +124,7 @@ export default {
   width: 30px;
   margin-right: 5px;
 }
-.login-btn {
+.font-size-color {
   font-size: 20px;
   color: #666666;
   font-weight: 400;

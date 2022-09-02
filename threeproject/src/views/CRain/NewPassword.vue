@@ -1,37 +1,36 @@
 <template>
   <div>
-    <PersonalHeader :mphone="true"></PersonalHeader>
+    <PersonalHeader :newpwd="true"></PersonalHeader>
     <div class="content-container">
-      <div class="title-box">修改手机</div>
+      <div class="title-box">设置新密码</div>
       <div class="container">
-        <div class="tips-text">
-          您正在对{{ username }}账号进行修改手机操作，请谨慎操作
-        </div>
+        <div class="tips-text">请重设您的账号密码</div>
         <table>
           <tr>
-            <td>新手机：</td>
             <td>
-              <input
-                type="text"
-                v-model="newPhone"
-                placeholder="请输入新的手机号码"
-              />
-            </td>
-            <td>
-              <button @click="getCode">获取验证码</button>
+              <el-input
+                placeholder="请输入新密码"
+                v-model="newpassword"
+                show-password 
+                style="width: 420px;margin-bottom:20px;"
+              ></el-input>
             </td>
           </tr>
           <tr>
-            <td>验证码：</td>
             <td>
-              <input type="text" v-model="newCode" placeholder="请输入验证码" />
+              <el-input
+                placeholder="请再次确认新密码"
+                v-model="newpassword1"
+                show-password 
+                style="margin-bottom: 10px;"
+              ></el-input>
             </td>
           </tr>
         </table>
-        <button class="save-btn" @click="saveModify">保存</button>
         <div style="font-size: 14px; color: #333333">
-          若无法验证，您可以联系管理员进行找回密码
+          密码长度6-16位，数字，字符，字母至少包含两种
         </div>
+        <button class="save-btn" @click="saveModify">确定</button>
       </div>
     </div>
   </div>
@@ -41,22 +40,16 @@
 import PersonalHeader from "../../components/CRain/PersonalHeader";
 
 export default {
-  name: "ModifyPhone",
+  name: "NewPassword",
   data() {
     return {
-      username: "CRain",
-      newPhone: "",
-      newCode: "",
+      newpassword: "",
+      newpassword1: "",
     };
   },
   methods: {
-    /* 获取验证码 */
-    getCode() {
-      console.log("getCode");
-    },
-    /* 保存 */
     saveModify() {
-      console.log("saveModify");
+      console.log("保存新密码");
     },
   },
   components: {
@@ -85,17 +78,12 @@ export default {
   text-align: center;
 }
 .tips-text {
-  background-color: #f6f6f6;
-  padding: 15px 20px;
-  font-size: 14px;
+  font-size: 20px;
   color: #333333;
-  margin: 40px 50px 50px 0;
 }
-table tr input {
-  border: 1px solid #efefef;
-  border-radius: 5px;
-  padding: 15px 20px;
-  width: 240px;
+table {
+  margin-top: 30px;
+  color: #666666;
 }
 table tr td {
   font-size: 20px;
@@ -115,9 +103,12 @@ table tr td button {
   color: white;
   border-radius: 5px;
   border: none;
-  /* line-height: 35px; */
-  margin: 20px 0;
+  margin: 40px 0;
   padding: 10px 200px;
   cursor: pointer;
+}
+.el-input--suffix .el-input__inner {
+  width: 420px;
+  margin-bottom: 20px;
 }
 </style>

@@ -3,20 +3,35 @@
     <!-- <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/> -->
+    </nav> -->
+    <!-- <router-view></router-view> -->
 
     <!-- 登录组件 -->
     <!-- <Login></Login> -->
 
-    <!-- 个人资料组件 -->
-    <PersonalData></PersonalData>
+    <!-- 个人资料 -->
+    <!-- <PersonalData></PersonalData> -->
 
-    <!-- 个人设置组件 -->
+    <!-- 安全设置 -->
     <!-- <SecuritySetting></SecuritySetting> -->
 
-    <!-- 修改手机组件 -->
+    <!-- 修改手机 -->
     <!-- <ModifyPhone></ModifyPhone> -->
+
+    <!-- 修改密码 -->
+    <!-- <ModifyPassword></ModifyPassword> -->
+
+    <!-- 忘记密码 -->
+    <!-- <RetrievePassword></RetrievePassword> -->
+
+    <!-- 重置密码 -->
+    <!-- <RestPassword></RestPassword> -->
+
+    <!-- 设置新密码 -->
+    <NewPassword></NewPassword>
+
+    <!-- 测试页面 -->
+    <!-- <Test></Test> -->
   </div>
 </template>
 
@@ -25,6 +40,12 @@ import Login from "./views/CRain/Login";
 import PersonalData from "./views/CRain/PersonalData";
 import SecuritySetting from "./views/CRain/SecuritySetting";
 import ModifyPhone from "./views/CRain/ModifyPhone";
+import ModifyPassword from "./views/CRain/ModifyPassword";
+import RetrievePassword from "./views/CRain/RetrievePassword";
+import RestPassword from "./views/CRain/RestPassword";
+import NewPassword from "./views/CRain/NewPassword";
+/* 测试页面 */
+import Test from "./views/CRain/Test";
 
 export default {
   nmae: "App",
@@ -33,6 +54,11 @@ export default {
     PersonalData,
     SecuritySetting,
     ModifyPhone,
+    ModifyPassword,
+    Test,
+    RetrievePassword,
+    RestPassword,
+    NewPassword,
   },
 };
 </script>

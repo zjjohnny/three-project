@@ -1,20 +1,23 @@
 <template>
   <div>
-    <PersonalHeader :mphone="true"></PersonalHeader>
+    <PersonalHeader :opwd="true"></PersonalHeader>
     <div class="content-container">
-      <div class="title-box">修改手机</div>
+      <div class="title-box">重置密码</div>
       <div class="container">
         <div class="tips-text">
           您正在对{{ username }}账号进行修改手机操作，请谨慎操作
         </div>
+        <span style="font-size: 14px; color: #333333"
+          >点击获取验证码，短信将发送至安全手机*******1234</span
+        >
         <table>
           <tr>
-            <td>新手机：</td>
+            <td>登陆名：</td>
             <td>
               <input
                 type="text"
-                v-model="newPhone"
-                placeholder="请输入新的手机号码"
+                v-model="inpuval"
+                placeholder="手机/邮箱/会员名"
               />
             </td>
             <td>
@@ -28,7 +31,7 @@
             </td>
           </tr>
         </table>
-        <button class="save-btn" @click="saveModify">保存</button>
+        <button class="save-btn" @click="goToNext">下一步</button>
         <div style="font-size: 14px; color: #333333">
           若无法验证，您可以联系管理员进行找回密码
         </div>
@@ -41,23 +44,21 @@
 import PersonalHeader from "../../components/CRain/PersonalHeader";
 
 export default {
-  name: "ModifyPhone",
+  name: "RestPassword",
   data() {
     return {
       username: "CRain",
-      newPhone: "",
+      inpuval: "",
       newCode: "",
     };
   },
   methods: {
-    /* 获取验证码 */
     getCode() {
-      console.log("getCode");
+      console.log("获取验证码");
     },
-    /* 保存 */
-    saveModify() {
-      console.log("saveModify");
-    },
+    goToNext(){
+      console.log('输入正确进入设置新密码页面');
+    }
   },
   components: {
     PersonalHeader,
@@ -89,7 +90,11 @@ export default {
   padding: 15px 20px;
   font-size: 14px;
   color: #333333;
-  margin: 40px 50px 50px 0;
+  margin: 40px 50px 10px 0;
+}
+table {
+  margin-top: 30px;
+  color: #666666;
 }
 table tr input {
   border: 1px solid #efefef;
