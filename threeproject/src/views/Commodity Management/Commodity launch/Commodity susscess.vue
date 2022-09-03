@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div>
-      <steptiame></steptiame>
-    </div>
     <!-- 项目发表成功 -->
     <div class="langchsucess">
       <span><i class="iconfont icon-success"></i>恭喜你，商品发布成功！</span>
@@ -14,11 +11,10 @@
 </template>
 
 <script>
-import steptiame from "@/components/Commodity Management/steptiame.vue";
 import "@/assets/font/iconfont.css";
 export default {
   components: {
-    steptiame,
+
   },
   methods: {
     backcommdity() {

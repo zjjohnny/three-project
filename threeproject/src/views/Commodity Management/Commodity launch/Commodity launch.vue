@@ -2,22 +2,34 @@
   <div>
     <!-- 进度条 -->
     <div>
-      <steptiame></steptiame>
+      <steptiame ref="asss"></steptiame>
     </div>
-    <!-- 选择的进度提示 -->
-    <div class="selectpart">
-      <span>您已选：<span></span>><span></span>><span></span></span>
+    <!-- 选择商品分类 -->
+    <div v-show="active === 1">
+      <div class="selectpart">
+        <span>您已选：<span></span>><span></span>><span></span></span>
+      </div>
+      <!-- 穿梭框 -->
+      <div class="treepart">
+        <el-cascader-panel
+          :options="options"
+          @change="handleChange"
+        ></el-cascader-panel>
+      </div>
     </div>
-    <!--  穿梭框-->
-    <div class="treepart">
-      <el-cascader-panel
-        :options="options"
-        @change="handleChange"
-        :size="medium"
-      ></el-cascader-panel>
+    <!-- 填写商品详情 -->
+    <div>
+      <commodity-details
+        v-show="active === 2"
+        @editdata="editdata"
+        :active="active"
+        ref="details"
+      ></commodity-details>
     </div>
-    <div class="btn">
-      <el-button type="success">下一步</el-button>
+    <commodity-susscess v-show="active === 3"></commodity-susscess>
+
+    <div class="btn" v-if="ishow">
+      <el-button type="success" @click="btns">下一步</el-button>
     </div>
   </div>
 </template>
@@ -25,9 +37,15 @@
 
 <script>
 import steptiame from "@/components/Commodity Management/steptiame.vue";
+import CommodityDetails from "./Commodity details.vue";
+import CommoditySusscess from "./Commodity susscess.vue";
+import { mapState } from "vuex";
 export default {
+  name: "CommodityLaunch",
   components: {
     steptiame,
+    CommodityDetails,
+    CommoditySusscess,
   },
   data() {
     return {
@@ -299,12 +317,86 @@ export default {
           ],
         },
       ],
+      active: 1,
+      ishow: true,
+      editlist: "",
     };
+  },
+
+  computed: {
+    ...mapState(["roleeidttData"]),
   },
 
   methods: {
     handleChange(value) {
       console.log("%c ======>>>>>>>>", "color:orange;", value); //获取选中的树形的值
+    },
+    // 编辑时里面的值
+    editdata(data) {
+      console.log("%c ======>>>>>>>>", "color:orange;", data);
+      data = this.editlist;
+    },
+    // 编辑路由跳转传参
+    btns() {
+      const data = this.$route.query;
+      // console.log("%c ======>>>>>>>>", "color:orange;", data);
+      console.log("%c ======>>>>>>>>", "color:blue;", this.active);
+      if (this.active === 2) {
+        const details = this.$refs.details.$data;
+        // console.log("%c ======>>>>>>>>", "color:orange;", details);
+        const objedit = {
+          category: details.category,
+          goodsName: details.input,
+          id: data.rowId,
+          price: details.inputmoeny,
+          remarks: details.textarea,
+        };
+        if (data && data.isEdit === "true") {
+          console.log("%c ======>>>>>>>>", "color:orange;", objedit);
+          this.editproducts(objedit);
+        } else {
+          // 调用新建的接口
+          this.addproducts(objedit);
+        }
+        return false;
+      }
+      if (this.active === 3) {
+        this.ishow = false;
+      }
+      const dom = this.$refs.asss;
+      dom.active = dom.active + 1;
+      this.active = dom.active;
+    },
+
+    // 编辑的接口
+    async editproducts(obj) {
+      try {
+        const res = await this.$axios.editproduct(obj);
+        if (res.code === 200) {
+          // 要将修改后的list返回给tablelist从新渲染表格
+          console.log("%c ======>>>>>>>>", "color:orange;", res);
+          this.active = 3;
+        }
+      } catch (error) {
+        console.log("%c ======>>>>>>>>", "color:orange;", error);
+      }
+    },
+
+    // 新增接口
+    async addproducts(obj) {
+      try {
+        //
+        const res = await this.$axios.addproudct(obj);
+        if (res.code === 200) {
+          this.$message({
+            message: "新增成功",
+            type: "success",
+          });
+          // this.getaprtmentslist();
+        }
+      } catch (error) {
+        alert(error);
+      }
     },
   },
 };
@@ -328,6 +420,7 @@ export default {
     padding-left: 30px;
   }
 }
+
 .btn {
   display: flex;
   justify-content: center;

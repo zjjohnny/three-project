@@ -12,10 +12,10 @@
           <Allproduct></Allproduct
         ></el-tab-pane>
         <el-tab-pane label="出售中的商品" name="second">
-          <Allproduct></Allproduct
-        ></el-tab-pane>
+          <allproductseles></allproductseles>
+        </el-tab-pane>
         <el-tab-pane label="仓库中的商品" name="third">
-          <Allproduct></Allproduct
+          <aproductbox></aproductbox
         ></el-tab-pane>
         <el-tab-pane label="商品回收" name="fourth"
           ><commodity-recycile></commodity-recycile>
@@ -31,12 +31,16 @@ import Inputteams from "@/components/Commodity Management/Commodity title.vue";
 import AllproductVue from "@/components/Commodity Management/Allproduct.vue";
 import Allproduct from "@/components/Commodity Management/Allproduct.vue";
 import CommodityRecycile from "../../components/Commodity Management/Commodity recycile.vue";
+import Allproductseles from "../../components/Commodity Management/Allproductseles.vue";
+import Aproductbox from "../../components/Commodity Management/Aproductbox.vue";
 export default {
   components: {
     Inputteams,
     AllproductVue,
     Allproduct,
     CommodityRecycile,
+    Allproductseles,
+    Aproductbox,
   },
   data() {
     return {
@@ -44,9 +48,7 @@ export default {
     };
   },
   methods: {
-    handleClick(tab, event) {
-      // console.log(tab, event);
-    },
+    handleClick(tab, event) {},
   },
 };
 </script>

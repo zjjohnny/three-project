@@ -26,17 +26,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Commodity Management/Commodity review.vue')
   }, {
-    path: '/Commditydetails',
+    path: '/Commditydetails', //Commditydetails
     name: '商品详情',
     component: () => import('@/views/Commodity Management/Commodity launch/Commodity details.vue')
-  }, {
-    path: '/Commoditysusscess',
-    name: "商品发布成功",
-    component: () => import("@/views/Commodity Management/Commodity launch/Commodity susscess.vue")
-  },{
-    path:'/Commodityreviewcontent',
-    name:'商品回复',
-    component:()=>import('@/views/Commodity Management/Commodity reviewcontent.vue')
+  },
+  {
+    path: '/Commodityreviewcontent',
+    name: '商品回复',
+    component: () => import('@/views/Commodity Management/Commodity reviewcontent.vue')
   }
 ]
 
