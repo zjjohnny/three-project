@@ -1,124 +1,24 @@
 <template>
-  <el-menu
-    default-active="1-4-1"
-    class="el-menu-vertical-demo"
-    @open="handleOpen"
-    @close="handleClose"
-    :collapse="isCollapse"
-  >
+  <el-menu default-active="1-4-1" 
+          class="el-menu-vertical-demo"
+          background-color="#000" 
+          text-color="#fff"
+          active-text-color="#fed000"
+          style="height:100%"
+          @open="handleOpen" @close="handleClose"
+    :collapse="isCollapse">
     <h3>后台管理系统</h3>
-    <el-menu-item
-      v-for="item in nochildren"
-      :index="item.path"
-      :key="item.path"
-    >
+    <el-menu-item v-for="item in nochildren" :index="item.path" :key="item.path">
       <i :class="item.icon"></i>
       <span slot="title">{{ item.lable }}</span>
     </el-menu-item>
-    <el-submenu v-for="item in haschildren" :index="item.path" :key="item.path">
+    <el-submenu v-for="item in haschildren" :index="item.path" :key="item.path" >
       <template slot="title">
         <i :class="item.icon"></i>
-        <span slot="title">{{ item.lable }}</span>
+        <span slot="title">{{ item.lable}}</span>
       </template>
-      <el-menu-item-group
-        v-for="(subItem, subIndex) in item.children"
-        :key="subItem.path"
-      >
-        <!-- <span slot="title"></span> -->
-        <el-menu-item :index="subIndex">{{ subItem.lable }}</el-menu-item>
-        <!-- <el-menu-item index="1-2">选项2</el-menu-item>
-      <el-menu-item index="1-3">选项3</el-menu-item>
-      <el-menu-item index="1-4">选项4</el-menu-item>  -->
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="3">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航三</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title"></span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="4">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航四</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title"></span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
-        <el-menu-item index="1-3">选项3</el-menu-item>
-        <el-menu-item index="1-4">选项4</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="5">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航五</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title"></span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="6">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航6</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title"></span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
-        <el-menu-item index="1-3">选项3</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="7">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航七</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title"></span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
-        <el-menu-item index="1-3">选项3</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="8">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航八</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title"></span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="9">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航九</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title"></span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="10">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航十</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title"></span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
+      <el-menu-item-group v-for="submenu in item.children":key="submenu.path">
+        <el-menu-item :index="submenu.path">{{submenu.lable}}</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
   </el-menu>
@@ -138,79 +38,184 @@ export default {
           url: "Home/home",
         },
         {
+          path:"商品管理",
           lable: "商品管理",
           icon: "el-icon-shopping-cart-full",
           children: [
             {
-              path: "/page1",
-              name: "page1",
+              path: "Commodity management",
+              name: "Commodity management",
               lable: "商品管理",
               url: "other/pageone",
             },
             {
-              path: "/page2",
-              name: "page2",
+              path: "Product release",
+              name: "Product release",
               lable: "商品发布",
               url: "other/pagetwo",
             },
             {
-              path: "/page3",
-              name: "page3",
+              path: "Product review",
+              name: "Product review",
               lable: "商品评论",
               url: "other/pagethree",
             },
             {
-              path: "/page4",
-              name: "page4",
+              path: "Commodity recycle bin",
+              name: "Commodity recycle bin",
               lable: "商品回收站",
               url: "other/pagefour",
             },
           ],
         },
-        // {
-        //    lable:'订单管理',
-        //    icon:'el-icon-s-order',
-        //    children:[{
-        //         path:'/page1',
-        //         name:'page1',
-        //         lable:'订单管理',
-        //         url:'other/pageone'
-        //     },
-        //     {
-        //             path:'/page2',
-        //             name:'page2',
-        //             lable:'退款管理',
-        //             url:'other/pagetwo'
-        //     },
-        //     ]},
-        // {
-        //    lable:'运营管理',
-        //    icon:'el-icon-data-line',
-        //    children:[{
-        //         path:'/page1',
-        //         name:'page1',
-        //         lable:'轮播图管理',
-        //         url:'other/pageone'
-        //    },
-        //    {
-        //         path:'/page2',
-        //         name:'page2',
-        //         lable:'导航分类',
-        //         url:'other/pagetwo'
-        //    },
-        //    {
-        //         path:'/page3',
-        //         name:'page3',
-        //         lable:'商城信息',
-        //         url:'other/pagethree'
-        //    },
-        //    {
-        //         path:'/page4',
-        //         name:'page4',
-        //         lable:'商城设置',
-        //         url:'other/pagefour'
-        //    }
-        //     ]},
+        {
+           path:"订单管理",
+           lable:'订单管理',
+           icon:'el-icon-s-order',
+           children:[{
+                path:'Order management',
+                name:'Order management',
+                lable:'订单管理',
+                url:'other/pageone'
+            },
+            {
+                    path:'Refund management',
+                    name:'Refund management',
+                    lable:'退款管理',
+                    url:'other/pagetwo'
+            }]
+        },
+        {
+           path:"运营管理",
+           lable:'运营管理',
+           icon:'el-icon-data-line',
+           children:[{
+                path:'Carousel management',
+                name:'Carousel management',
+                lable:'轮播图管理',
+                url:'other/pageone'
+           },
+           {
+                path:'Navigation classification',
+                name:'Navigation classification',
+                lable:'导航分类',
+                url:'other/pagetwo'
+           },
+           {
+                path:'Mall information',
+                name:'Mall information',
+                lable:'商城信息',
+                url:'other/pagethree'
+           },
+           {
+                path:'Mall settings',
+                name:'Mall settings',
+                lable:'商城设置',
+                url:'other/pagefour'
+           }]
+        },
+        {
+          path:"营销管理",
+          lable:'营销管理',
+          icon:'el-icon-finished',
+          children:[{
+                path:'Coupon management',
+                name:'Coupon management',
+                lable:'优惠券管理',
+                url:'other/pageone'
+            },
+            {
+                    path:'discount package',
+                    name:'discount package',
+                    lable:'优惠套餐',
+                    url:'other/pagetwo'
+            }]
+        },
+        {
+            path:"数据统计",
+            lable:'数据统计',
+            icon:'el-icon-edit-outline',
+            children:[{
+                  path:'New user',
+                  name:'New user',
+                  lable:'新增用户',
+                  url:'other/pageone'
+              },
+              {
+                  path:'Active users',
+                  name:'Active users',
+                  lable:'活跃用户',
+                  url:'other/pagetwo'
+              },
+               {
+                  path:'Business data',
+                  name:'Business data',
+                  lable:'业务数据',
+                  url:'other/pagetwo'
+              }]
+        },
+        {
+            path:"财务管理",
+            lable:'财务管理',
+            icon:'el-icon-s-goods',
+            children:[{
+                  path:'My assets',
+                  name:'My assets',
+                  lable:'我的资产',
+                  url:'other/pageone'
+              },
+              {
+                  path:'Account Statement',
+                  name:'Account Statement',
+                  lable:'对账单',
+                  url:'other/pagetwo'
+              },
+               {
+                  path:'financial data',
+                  name:'financial data',
+                  lable:'财务数据',
+                  url:'other/pagetwo'
+              }]
+        }, 
+        {
+            path:"账号管理",
+            lable:'账号管理',
+            icon:'el-icon-user',
+            children:[{
+                  path:'Account list',
+                  name:'Account list',
+                  lable:'账号列表',
+                  url:'other/pageone'
+              },
+              {
+                  path:'Role management',
+                  name:'Role management',
+                  lable:'角色管理',
+                  url:'other/pagetwo'
+              }]
+        },
+        {
+            path:"用户反馈",
+            lable:'用户反馈',
+            icon:'el-icon-notebook-2',
+            children:[{
+                  path:'App feedback',
+                  name:'App feedback',
+                  lable:'APP反馈',
+                  url:'other/pageone'
+              }]
+        },  
+        {
+            path:"设置",
+            lable:'设置',
+            icon:'el-icon-setting',
+            children:[{
+                  path:'Operation settings',
+                  name:'Operation settings',
+                  lable:'操作设置',
+                  url:'other/pageone'
+              }]
+        },     
       ],
     };
   },
@@ -224,18 +229,27 @@ export default {
   },
   computed: {
     nochildren() {
-      return this.menu.filter((item) => !item.childern);
+      return this.menu.filter((item) => !item.children);
     },
     haschildren() {
-      return this.menu.filter((item) => item.childern);
+      return this.menu.filter((item) => item.children);
     },
   },
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+}
+.el-menu{
+  height: 100%;
+  border: none;
+  h3{
+    color: white;
+    text-align: center;
+    line-height: 50px;
+  }
 }
 </style>
