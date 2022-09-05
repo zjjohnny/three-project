@@ -4,11 +4,23 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+const originalPush = VueRouter.prototype.push
+// 修改 原型对象中的push方法
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err=>err)
+}
 const routes = [
     {
         path:'/',
-        name:'Home',
-        component:()=>import("../views/Home.vue")
+        name:'Main',
+        component:()=>import("../views/Main.vue"),
+        children:[
+        {
+            path:"/home",
+            name:"home",
+            component:()=>import('../views/home')
+        }
+        ]
     }
 ]
 

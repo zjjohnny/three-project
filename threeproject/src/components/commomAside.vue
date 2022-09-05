@@ -7,8 +7,11 @@
           style="height:100%"
           @open="handleOpen" @close="handleClose"
     :collapse="isCollapse">
-    <h3>后台管理系统</h3>
-    <el-menu-item v-for="item in nochildren" :index="item.path" :key="item.path">
+    <h3>{{isCollapse ? '后台':'后台管理系统'}}</h3>
+    <el-menu-item v-for="item in nochildren" 
+    @click="clickMenu(item)"
+    :index="item.path" 
+    :key="item.path">
       <i :class="item.icon"></i>
       <span slot="title">{{ item.lable }}</span>
     </el-menu-item>
@@ -28,7 +31,6 @@
 export default {
   data() {
     return {
-      isCollapse: false,
       menu: [
         {
           path: "/",
@@ -226,6 +228,11 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    clickMenu(item){
+        this.$router.push({
+          name:item.name
+        })
+    },
   },
   computed: {
     nochildren() {
@@ -234,6 +241,9 @@ export default {
     haschildren() {
       return this.menu.filter((item) => item.children);
     },
+    isCollapse(){
+      return this.$store.state.tab.isCollapse
+    }
   },
 };
 </script>

@@ -5,8 +5,11 @@
         <commom-aside></commom-aside>
     </el-aside>
     <el-container>
-        <el-header>Header</el-header>
-        <el-main>Main</el-main>
+        <el-header><CommomHeader/></el-header>
+        <el-main>
+            <index/>
+            <!-- <router-view></router-view> -->
+        </el-main>
     </el-container>
     </el-container>
 </div>
@@ -14,10 +17,14 @@
 
 <script>
 import commomAside from  '../components/commomAside.vue'
+import CommomHeader from '../components/CommomHeader.vue'
+import index from '../views/home/index.vue'
 export default {
     name:'Home',
     components:{
-        commomAside
+        commomAside,
+        CommomHeader,
+        index
     },
 }
 </script>
@@ -30,6 +37,7 @@ export default {
     }
     .el-header{
         background-color:white;
+        
     }
     .el-main{
         padding-top: 0;
