@@ -1,0 +1,23 @@
+{
+  "id": "3621331",
+  "name": "part3",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "868597",
+      "name": "icon-注册头像",
+      "font_class": "iconzhucetouxiang",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "3996617",
+      "name": "返回",
+      "font_class": "fanhui",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    }
+  ]
+}

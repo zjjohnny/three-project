@@ -14,8 +14,8 @@
         </div>
         <div class="refund-table-date">
             <table class="refund-table">
-                <tr>
-                    <td rowspan="2">订单号</td>
+                <tr class="table-head">
+                    <td>订单号</td>
                     <td>退款商品</td>
                     <td>退款金额</td>
                     <td>买家账号</td>
@@ -24,15 +24,31 @@
                     <td>退款状态</td>
                     <td>操作</td>
                 </tr>
+                <tr class="table-contanier">
+                    <td>2021121937827297</td>
+                    <td>订单所有商品</td>
+                    <td>￥8213.30</td>
+                    <td>18000000000</td>
+                    <td>2022/6/19</td>
+                    <td>2022/6/19</td>
+                    <td>退款关闭</td>
+                    <td class="table-check" @click="checkDetail">查看</td>
+                </tr>
             </table>
         </div>
+
+        <GoodsPage></GoodsPage>
     </div>
 </template>
 
 <script>
+import GoodsPage from './GoodsPage.vue';
 export default{
     name: 'GoodsRefundItem',
     props: ['state', 'name'],
+    components: {
+        GoodsPage
+    },
     data(){
         return {
             searchInfo:{
@@ -47,12 +63,20 @@ export default{
                 }, {
                 value: '退款失败'
             }],
+            
         }
     },
     methods: {
+        // 搜索查询
         searchOrder(){
             console.log(this.searchInfo);
-        }
+        },
+        // 点击查看退款详情
+        checkDetail(){
+            this.$router.replace('/RefundDetail')
+        },
+
+        
     }
 }
 </script>
@@ -82,23 +106,23 @@ export default{
     /* 表格 */
     table{
         width: 90%;
-        border-collapse: collapse;
+        border-collapse: collapse;  /*表格合并 */
         font-size: 14px;
-        color: gray;
-    }
-    table caption{
-        font-size: 2em;
-        font-weight: bold;
-        margin: 1em 0;
     }
     td{
         border: 1px solid lightgray;
         text-align: center;
         padding: 5px 0;
     }
-    /* table thead tr{
-        background-color: #008c8c;
-        color: #fff;
-    } */
+    .table-head{
+        height: 20px;
+    }
+    .table-contanier{
+        height: 60px;
+    }
+    .table-check{
+        color: blue;
+        cursor: pointer;
+    }
     
 </style>

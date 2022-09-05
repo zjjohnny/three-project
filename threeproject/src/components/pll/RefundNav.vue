@@ -2,10 +2,10 @@
     <div>
         <ul class="orderNav">
             <li> 
-              <router-link to="/GoodsRefundItem?state=退款申请" active-class="nav_active">退款申请</router-link>
+              <router-link to="/RefundManagment/GoodsRefundItem?state=退款申请" active-class="nav_active">退款申请</router-link>
             </li>
             <li>
-              <router-link to="/GoodsRefundItem?name=待发货" active-class="nav_active">待处理</router-link>
+              <router-link to="/RefundManagment/GoodsRefundItem?name=待发货" active-class="nav_active">待处理</router-link>
             </li>
         </ul>
     </div>
@@ -20,7 +20,7 @@ export default{
 <style scoped>
     ul{
         margin: 0 135px;
-        width: 100%;
+        width: 80%;
         padding: 0;
         height: 42px;
         display: flex;
