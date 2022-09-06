@@ -8,8 +8,16 @@
         <div>
           <div><i class="el-icon-star-on"></i><span>商品分类</span></div>
           <div>
-            {{ category }}
-            <el-button type="warning" size="mini" plain>修改</el-button>
+            {{category}}
+            <div v-if="this.selectlist.length == 3">
+              {{ selectlist[0] }}>{{ selectlist[1] }}>{{ selectlist[2] }}
+            </div>
+            <div v-if="this.selectlist.length == 2">
+              {{ selectlist[0] }}>{{ selectlist[1] }}
+            </div>
+            <el-button type="warning" size="mini" plain @click="editcateger"
+              >修改</el-button
+            >
           </div>
         </div>
         <!-- 名称 -->
@@ -50,7 +58,19 @@
           <div class="pothopart">
             <i class="el-icon-star-on"></i> <span>上传主图</span>
           </div>
-          <div><img src="@/bg.png" alt="" /></div>
+          <div>
+            <el-upload
+              action="https://jsonplaceholder.typicode.com/posts/"
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="" />
+            </el-dialog>
+          </div>
         </div>
         <!-- 商品报价 -->
         <div>
@@ -156,10 +176,10 @@
 
 <script>
 // import steptiame from "@/components/Commodity Management/steptiame.vue";
-import Ueditor from "@/components/Commodity Management/ueditor.vue";
+import Ueditor from "@/components/CommodityManagement/ueditor.vue";
 import { mapState } from "vuex";
 export default {
-  props: ["active"],
+  props: ["active", "selectlist"],
   components: {
     Ueditor,
   },
@@ -168,7 +188,23 @@ export default {
       input: "", //商品名称搜索，
       textarea: "", //商品简介
       inputmoeny: "", //商品报价
-      options: [], //下拉框数据的值
+      options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶',
+          disabled: true
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }], //下拉框数据的值
       value: "", //下拉框选择的值
       radio: "1", //商品发布单选框的值 1选择 0 没选择
       isradio: "2", //1表示是 2 表示否
@@ -176,7 +212,9 @@ export default {
       inputseokey: "", //SEO关键词
       textarea2: "", //商品描述
       mes: "", //副文本
-      category: "", //商品分類
+      category: this.selectlist, //商品分類 是要从上个页面拿到的
+      dialogImageUrl: "",
+      dialogVisible: false,
     };
   },
   mounted() {
@@ -214,15 +252,30 @@ export default {
         const res = await this.$axios.editproductshow({ id });
         if (res.code === 200) {
           console.log("%c ======>>>>>>>>", "color:red;", res.data);
-          console.log('%c ======>>>>>>>>','color:orange;',this.$data);
-          this.input=res.data.goodsName;
-          this.textarea=res.data.remarks;
-          this.inputmoeny=res.data.price;
-          this.category=res.data.category
+          console.log("%c ======>>>>>>>>", "color:orange;", this.$data);
+          this.input = res.data.goodsName;
+          this.textarea = res.data.remarks;
+          this.inputmoeny = res.data.price;
+          this.category = res.data.category;
         }
       } catch (error) {
         console.log("%c ======>>>>>>>>", "color:orange;", error);
       }
+    },
+
+    //修改种类
+    editcateger() {
+      this.$emit("editcateger");
+    },
+    // 图片加载方法删除
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    // 图片预览
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+      console.log(file);
     },
   },
 };

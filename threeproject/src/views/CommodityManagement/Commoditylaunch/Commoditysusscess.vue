@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     backcommdity() {
-      this.$router.push("/Comoditymangement");
+      this.$router.push("/");
     },
   },
 };

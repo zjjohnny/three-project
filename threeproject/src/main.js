@@ -18,6 +18,10 @@ import {
 } from "./http/api";
 Vue.prototype.$axios = server;
 Vue.use(ElementUI, axios);
+
+Vue.config.productionTip = false
+Vue.use(ElementUI);
+
 new Vue({
   router,
   store,

@@ -1,11 +1,12 @@
 import axios from 'axios';
-import qs from 'qs';
+// import qs from 'qs';
 const tr = 0;
 const apidomain = tr ? '/api' : 'http://42.192.152.16:8080'
 axios.defaults.timeout = 15000;
 axios.defaults.baseURL = apidomain;
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded' //声明请求格式
-axios.defaults.transformRequest = data => qs.stringify(data)  //qs是第三方库，转换为x-www-form-urlencoded
+// axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded' //声明请求格式
+axios.defaults.headers['Content-Type'] = "application/json" //声明请求格式
+// axios.defaults.transformRequest = data => qs.stringify(data)  //qs是第三方库，转换为x-www-form-urlencoded
 axios.interceptors.request.use(
   config => {
     return config;

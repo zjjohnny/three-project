@@ -33,12 +33,9 @@ export default {
     handleSizeChange(val) {
       this.page.page = 1;
       this.page.limit = val;
-      console.log("%c ======>>>>>>>>", "color:orange;", this.page);
       this.$emit("changPage");
-      console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
       this.$emit("changPage");
     },
   },

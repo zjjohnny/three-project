@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
+
     path: '/Commoditylaunch', //Commoditylaunch
     name: '商品发布',
-    component: () => import('../views/Commodity Management/Commodity launch/Commodity launch.vue')
+    component: () => import('../views/CommodityManagement/Commoditylaunch/Commoditylaunch.vue')
   },
   {
     path: '/', //Comoditymangement
@@ -16,7 +16,8 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Commodity Management/Commodity Management.vue')
+
+    component: () => import(/* webpackChunkName: "about" */ '../views/CommodityManagement/CommodityManagement.vue')
   },
   {
     path: '/Commdityreview',//Commdityreview
@@ -24,17 +25,18 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Commodity Management/Commodity review.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/CommodityManagement/Commodityreview.vue')
   }, {
     path: '/Commditydetails', //Commditydetails
     name: '商品详情',
-    component: () => import('@/views/Commodity Management/Commodity launch/Commodity details.vue')
+    component: () => import('@/views/CommodityManagement/Commoditylaunch/Commoditydetails.vue')
   },
   {
     path: '/Commodityreviewcontent',
     name: '商品回复',
-    component: () => import('@/views/Commodity Management/Commodity reviewcontent.vue')
-  }
+    component: () => import('@/views/CommodityManagement/Commodityreviewcontent.vue')
+  },
+ 
 ]
 
 const router = new VueRouter({

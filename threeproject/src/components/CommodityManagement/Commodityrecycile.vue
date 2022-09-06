@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- 搜索部分 -->
     <div class="serchpart">
       <ul>
         <li>
@@ -12,7 +11,7 @@
         </li>
         <li>
           <span>商品ID</span
-          ><el-input v-model="srceen.id" placeholder="请输入内容"></el-input>
+          ><el-input v-model="inputid" placeholder="请输入内容"></el-input>
         </li>
         <li>
           <span>商品分类</span>
@@ -36,18 +35,14 @@
       </ul>
       <div class="btncontent">
         <el-button type="success" @click="serch">搜索</el-button>
-        <el-button type="info">重置</el-button>
+        <el-button type="info" @click="reset">重置</el-button>
       </div>
     </div>
-    <!-- 发布删除 下架功能 -->
     <div class="btnarr">
-      <el-button type="primary">发布商品</el-button>
-      <div>
-        <el-button @click="delet()">批量删除</el-button>
-        <el-button>批量下架</el-button>
-      </div>
+      <el-button type="primary" @click="backcangku">恢复到仓库</el-button>
     </div>
-    <!-- table -->
+
+    <!-- 表格部分 -->
     <div class="tableteam">
       <el-table
         ref="multipleTable"
@@ -55,70 +50,47 @@
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange"
-        :default-sort="{
-          prop: 'creationTime, releaseTime,price, stock,sales',
-          order: 'descending',
-        }"
       >
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column prop="goodsName" label="商品名称" width="250">
         </el-table-column>
-        <el-table-column prop="price" label="商品价格" width="160" sortable>
+        <el-table-column prop="category" label="商品分类" width="160">
         </el-table-column>
-        <el-table-column prop="stock" label="商品库存" width="160" sortable>
+        <el-table-column prop="price" label="商品价格" width="160">
         </el-table-column>
-        <el-table-column prop="sales" label="商品销量" width="160" sortable>
+        <el-table-column prop="sales" label="累计销量" width="160">
         </el-table-column>
-        <el-table-column
-          label="创建时间"
-          width="190"
-          prop="creationTime"
-          sortable
-        >
-          <template slot-scope="scope">{{ scope.row.creationTime }}</template>
+        <el-table-column prop="sales" label="商品排位" width="160">
         </el-table-column>
-        <el-table-column
-          label="发布日期"
-          width="190"
-          prop="releaseTime"
-          sortable
-        >
-          <template slot-scope="scope">{{ scope.row.releaseTime }}</template>
+        <el-table-column prop="stock" label="库存" width="160">
         </el-table-column>
         <el-table-column label="操作" width="170">
-          <el-button @click="handleClick(scope.row)" type="text" size="small"
-            >编辑商品</el-button
-          >
-          <el-button @click="downClick(scope.row)" type="text" size="small"
-            >立即下架</el-button
-          >
-          <el-button @click="deletClick(scope.row)" type="text" size="small"
-            >删除商品</el-button
+          <template slot-scope="scope">
+            <el-button
+              @click="handleClick(scope.row.id)"
+              type="text"
+              size="small"
+              >恢复到仓库</el-button
+            ></template
           >
         </el-table-column>
       </el-table>
     </div>
-    <!-- 分页部分 -->
+    <!-- 分页 -->
     <div class="divadepage">
-      <divadepageVue ref="pageing" @changPage="getlsit"></divadepageVue>
+      <divadepage ref="pageing" @changPage="getlsit"></divadepage>
     </div>
   </div>
 </template>
 
 <script>
-import divadepageVue from "./divadepage.vue";
+import Divadepage from "./divadepage.vue";
 export default {
-  components: { divadepageVue },
-  name: "Allproduct",
+  name: "Comodiityrecicle",
+  components: { Divadepage },
   data() {
     return {
-      // sells1: "", //销量查询1
-      // sells2: "", //銷量查詢2
-      // inputmoney1: "", //商品价格查询1
-      // inputmoney2: "", //商品价格查询2
-      // input: "", //商品名称查询
-      // inputid: "", //商品id查询
-      // category: "", //商品分类
+      inputid: "", //商品id查询
       tableData: [],
       multipleSelection: [], //多选框数据
       srceen: {
@@ -129,43 +101,36 @@ export default {
         smallPrice: "",
         bigSales: "",
         smallSales: "",
+        editdata: "", //用来编辑商品装数据
+        state: false,
+        isDelete: true,
       },
     };
   },
   mounted() {
-    // console.log("%c ======>>>>>>>>", "color:orange;", 11111);
-    // this.init();
+    this.init();
   },
   methods: {
+    reset() {
+      this.srceen = {};
+    },
+    init() {
+      this.getlsit();
+    },
+    // 恢复到仓库
     handleSelectionChange(val) {
       this.multipleSelection = val;
       // console.log("%c ======>>>>>>>>", "color:orange;", val); 多选框选择的列的数据
     },
-    // 编辑商品
-    handleClick(row) {
-      console.log(row); //编辑商品得到这一列的信息
-    },
-    // 删除商品
-    deletClick(row) {
-      console.log(row); //编辑商品得到这一列的信息
-    },
-    // 下架商品
-    downClick(row) {
-      console.log(row);
-    },
-    init() {
-      console.log("+++++++++++++++1");
-      this.getlsit();
-    },
-    // 获取分页
+    // 恢复到仓库
+
     getpageing() {
       const { page } = this.$refs.pageing;
       return page;
     },
-    // 获取列表
+
     async getlsit() {
       const page = this.getpageing();
-      console.log("%c ======>>>>>>>>", "color:orange;", page);
       try {
         const obj = {
           pageNum: page.page,
@@ -175,9 +140,8 @@ export default {
           ...obj,
           ...this.srceen,
         });
-        console.log("%c ======>>>>>>>>", "color:red;", res);
         if (res.code === 200) {
-          console.log("%c ======>>>>>>>>", "color:orange;", res.data);
+          page.total = res.data.total;
           this.tableData = res.data.list;
           this.tableData.forEach((el) => {
             el.price = "￥" + el.price;
@@ -187,21 +151,60 @@ export default {
         console.log("%c ======>>>>>>>>", "color:orange;", error);
       }
     },
-    // 搜索
     serch() {
       this.getlsit();
     },
 
-    // 批量删除的接口
-    
+    // 恢复到仓库
+    async backcanglu(id) {
+      try {
+        const ids = id
+          ? [id]
+          : this.multipleSelection.map((item) => {
+              return item.id;
+            });
+        const obj = {
+          ids,
+        };
+        const res = await this.$axios.backtocangku(ids);
+        if (res.code === 200) {
+          // 调用渲染表格函数
+          this.getlsit();
+          this.$message({
+            type: "success",
+            message: "恢复成功!",
+          });
+        }
+      } catch (err) {
+        alert(err);
+      }
+    },
+    // 重置
+    backcangku() {
+      // 掉仓库的接口
+      if (this.multipleSelection.length == 0) {
+        alert("请选择要删除的数据");
+      } else {
+        //  掉恢复仓库的接口
+        this.$confirm("下架的商品将会放到仓库中？", "确认信息", {
+        distinguishCancelAndClose: true,
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+      })
+        .then(() => {
+          // 确定以后的回调函数
+          this.backcanglu();
+        })
+      }
+    },
+    handleClick(id) {
+      this.backcanglu(id);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-* {
-  list-style: none;
-}
 .serchpart {
   margin-top: 30px;
   > ul {
@@ -223,7 +226,7 @@ export default {
 }
 
 .sellsinput {
-  width: 39px !important;
+  width: 100px !important;
 }
 
 .btnarr {
@@ -231,18 +234,18 @@ export default {
   justify-content: space-between;
   margin: 0 80px;
 }
-
 .btncontent {
   margin-left: 80px;
   margin-bottom: 30px;
 }
 
-.tableteam {
-  margin: 30px 80px;
-}
 .divadepage {
   margin: 30px 80px;
   display: flex;
   justify-content: end;
+}
+
+.tableteam {
+  margin: 30px 80px;
 }
 </style>

@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import Inputteams from "@/components/Commodity Management/Commodity title.vue";
-import CommodityLaunch from "../../views/Commodity Management/Commodity launch/Commodity launch.vue";
+import Inputteams from "@/components/CommodityManagement/Commoditytitle.vue";
+import CommodityLaunch from "../../views/CommodityManagement/Commoditylaunch/Commoditylaunch.vue";
 export default {
   name: "setptiame",
   components: { Inputteams, CommodityLaunch },

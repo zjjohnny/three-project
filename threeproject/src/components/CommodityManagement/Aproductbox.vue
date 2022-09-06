@@ -44,7 +44,7 @@
       <el-button type="primary" @click="launch">发布商品</el-button>
       <div>
         <el-button @click="delet">批量删除</el-button>
-        <el-button @click="downproduct">批量下架</el-button>
+        <el-button @click="downproduct">批量上架</el-button>
       </div>
     </div>
     <!-- table -->
@@ -85,13 +85,13 @@
         >
           <template slot-scope="scope">{{ scope.row.releaseTime }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="170">
+        <el-table-column label="操作" width="300">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small"
               >编辑商品</el-button
             >
             <el-button @click="downClick(scope.row.id)" type="text" size="small"
-              >立即下架</el-button
+              >立即上架</el-button
             >
             <el-button
               @click="deletClick(scope.row.id)"
@@ -127,6 +127,7 @@ export default {
       tableData: [],
       multipleSelection: [], //多选框数据
       srceen: {
+        isDelete: false,
         goodsName: "",
         id: "",
         category: "",
@@ -134,14 +135,13 @@ export default {
         smallPrice: "",
         bigSales: "",
         smallSales: "",
+        state: false, //表示下架
         editdata: "", //用来编辑商品装数据
-        state: "",
-        isDelete: "",
       },
     };
   },
   mounted() {
-    console.log("%c ======>>>>>>>>", "color:orange;", 11111);
+    // console.log("%c ======>>>>>>>>", "color:orange;", 11111);
     this.init();
   },
   methods: {
@@ -149,52 +149,22 @@ export default {
       this.multipleSelection = val;
       // console.log("%c ======>>>>>>>>", "color:orange;", val); 多选框选择的列的数据
     },
+    // 发布商品
+    launch() {
+      this.$router.push("/Commoditylaunch");
+    },
     // 编辑商品
     handleClick(row) {
-      // 要跳转路由
-      this.$router.push({
-        path: "/Commoditylaunch",
-        query: {
-          rowId: row.id,
-          isEdit: true,
-        },
-      });
-      // this.$router.push("/Commoditylaunch");
-      // this.$store.commit("saveroductist", row);
-      this.editdata = row;
       console.log(row); //编辑商品得到这一列的信息
-    },
-    // 删除商品
-
-    // 批量下架
-    downproduct() {
-      if (this.multipleSelection.length == 0) {
-        alert("请选择要下架的数据");
-      } else {
-        this.downproducts();
-      }
     },
     // 下架商品
     downClick(id) {
-      this.$confirm("下架的商品将会放到仓库中，您确定下架吗？", "确认信息", {
-        distinguishCancelAndClose: true,
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-      })
-        .then(() => {
-          // 确定以后的回调函数
-          this.downproducts(id);
-        })
-        .catch((action) => {
-          this.$message({
-            type: "info",
-            message:
-              action === "cancel" ? "放弃保存并离开页面" : "停留在当前页面",
-          });
-        });
+      // 确定以后的回调函数
+
+      // 确定以后的回调函数
+      this.downproducts(id);
     },
     init() {
-      console.log("+++++++++++++++1");
       this.getlsit();
     },
     // 获取分页
@@ -205,23 +175,17 @@ export default {
     // 获取列表
     async getlsit() {
       const page = this.getpageing();
-      console.log("%c ======>>>>>>>>", "color:orange;", page);
       try {
         const obj = {
           pageNum: page.page,
           pageSize: page.limit,
         };
-        console.log("%c ======>>>>>>>>", "color:orange;", {
-          ...obj,
-          ...this.srceen,
-        });
 
         const res = await this.$axios.getcommditylist({
           ...obj,
           ...this.srceen,
         });
         if (res.code === 200) {
-          console.log("%c ======>>>>>>>>", "color:orange;", res.data);
           page.total = res.data.total;
           this.tableData = res.data.list;
           this.tableData.forEach((el) => {
@@ -232,8 +196,56 @@ export default {
         console.log("%c ======>>>>>>>>", "color:orange;", error);
       }
     },
+    // 搜索
+    serch() {
+      this.getlsit();
+    },
 
-    // 拿到删除的接口
+    //
+    reset() {
+      this.srceen = {};
+    },
+
+    // 批量上架接口
+    async downproducts(id) {
+      try {
+        const ids = id
+          ? [id]
+          : this.multipleSelection.map((item) => {
+              return item.id;
+            });
+        // const obj = {
+        //   ids,
+        // };
+        const res = await this.$axios.updatagoods(ids);
+        if (res.code === 200) {
+          this.getlsit();
+          //  把下架的后的数据vuex传给仓库中的商品
+          this.$message({
+            type: "success",
+            message: "上架成功!",
+          });
+        }
+      } catch (err) {
+        alert(err);
+      }
+    },
+    // 批量上架
+    downproduct() {
+      if (this.multipleSelection.length == 0) {
+        alert("请选择要上架的数据");
+      } else {
+        this.$confirm("上架的商品将会出售，您确定上架吗？", "确认信息", {
+          distinguishCancelAndClose: true,
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        }).then(() => {
+          // 确定以后的回调函数
+          this.downproducts();
+        });
+      }
+    },
+
     async getdelet(id) {
       try {
         const ids = id
@@ -244,8 +256,7 @@ export default {
         const obj = {
           ids,
         };
-        console.log('%c ======>>>>>>>>','color:orange;',obj)
-        const res = await this.$axios.getdeletprodcut(obj);
+        const res = await this.$axios.getdeletprodcut(ids);
         if (res.code === 200) {
           // 调用渲染表格函数
           this.getlsit();
@@ -258,63 +269,24 @@ export default {
         alert(err);
       }
     },
-    // 搜索
-    serch() {
-      this.getlsit();
-    },
 
-    // 批量删除
     delet() {
       if (this.multipleSelection.length == 0) {
         alert("请选择要删除的数据");
       } else {
-        this.getdelet();
+        this.$confirm("该商品会移入回收站中", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }).then(() => {
+          // 这里写后端传过来数据的删除接口
+          this.getdelet();
+        });
       }
     },
-
-    // 单独删除
     deletClick(id) {
-      console.log("%c ======>>>>>>>>", "color:orange;", id);
-      this.$confirm("确认删除该商品吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-        // 这里写后端传过来数据的删除接口
-        this.getdelet(id);
-      });
-    },
-    // 批量下架
-    async downproducts(id) {
-      try {
-        const ids = id
-          ? [id]
-          : this.multipleSelection.map((item) => {
-              return item.id;
-            });
-        const obj = {
-          ids,
-        };
-        const res = await this.$axios.getdownproduct(obj);
-        if (res.code === 200) {
-          //  把下架的后的数据vuex传给仓库中的商品
-          this.$message({
-            type: "success",
-            message: "下架成功!",
-          });
-        }
-      } catch (err) {
-        alert(err);
-      }
-    },
-
-    // 发布商品
-    launch() {
-      this.$router.push("/Commoditylaunch");
-    },
-    //重置
-    reset() {
-      this.srceen = {};
+      // 这里写后端传过来数据的删除接口
+      this.getdelet(id);
     },
   },
 };
