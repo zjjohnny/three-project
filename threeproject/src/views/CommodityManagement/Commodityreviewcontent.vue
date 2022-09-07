@@ -144,7 +144,7 @@ export default {
 
 .item {
   margin-bottom: 18px;
-  border-bottom: 1px solid #ebeef5;
+  border-bottom: 1px solid rgba(228, 228, 228, 1);
 }
 
 .clearfix:before,

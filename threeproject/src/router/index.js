@@ -11,7 +11,7 @@ const routes = [
     component: () => import('../views/CommodityManagement/Commoditylaunch/Commoditylaunch.vue')
   },
   {
-    path: '/', //Comoditymangement
+    path: '/Comoditymangement', //Comoditymangement
     name: '商品管理',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -36,6 +36,15 @@ const routes = [
     name: '商品回复',
     component: () => import('@/views/CommodityManagement/Commodityreviewcontent.vue')
   },
+  {
+    path:'/',//goodsInformation
+    name:'商品信息',
+    component:()=>import('@/views/Mallinformation/MallinFormation.vue')   
+  },{
+    path:'/changeinformation',//changeinformation
+    name:'修改商城联系人信息',
+    component:()=>import('@/views/Mallinformation/changeMallinFormation.vue')
+  }
  
 ]
 
