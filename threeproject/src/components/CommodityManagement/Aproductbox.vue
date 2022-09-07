@@ -171,7 +171,16 @@ export default {
     },
     // 编辑商品
     handleClick(row) {
-      console.log(row); //编辑商品得到这一列的信息
+      // 要跳转路由
+      this.$router.push({
+        path: "/Commoditylaunch",
+        query: {
+          rowId: row.id,
+          isEdit: true,
+        },
+      });
+
+      this.editdata = row;
     },
     // 下架商品
     downClick(id) {

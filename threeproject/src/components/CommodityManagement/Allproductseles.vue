@@ -288,6 +288,19 @@ export default {
       });
       }
     },
+
+    handleClick(row) {
+      // 要跳转路由
+      this.$router.push({
+        path: "/Commoditylaunch",
+        query: {
+          rowId: row.id,
+          isEdit: true,
+        },
+      });
+
+      this.editdata = row;
+    },
   },
 };
 </script>

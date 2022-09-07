@@ -8,6 +8,7 @@
         <div>
           <div><i class="el-icon-star-on"></i><span>商品分类</span></div>
           <div>
+            {{ categoryedit }}
             <div v-if="this.selectlist.length == 3">
               {{ selectlist[0] }}>{{ selectlist[1] }}>{{ selectlist[2] }}
             </div>
@@ -59,6 +60,7 @@
           </div>
           <div>
             <el-upload
+              class="avatar-uploader"
               action=""
               :limit="1"
               :auto-upload="true"
@@ -68,11 +70,9 @@
               :on-remove="handleRemove"
               name="image"
             >
-              <i class="el-icon-plus"></i>
+              <i class="el-icon-plus "></i>
+              <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" />
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="" />
-            </el-dialog>
           </div>
         </div>
         <!-- 商品报价 -->
@@ -222,9 +222,11 @@ export default {
       textarea2: "", //商品描述
       mes: "", //副文本
       category: this.selectlist, //商品分類 是要从上个页面拿到的
+      categoryedit: "",
       dialogImageUrl: "",
       dialogVisible: false,
       imageUrl: "", //上传图片的路径
+      imgurledit:''//临时储存图片data给修改不上传图片使用
     };
   },
   mounted() {
@@ -282,12 +284,15 @@ export default {
       try {
         const res = await this.$axios.editproductshow({ id });
         if (res.code === 200) {
-          // console.log("%c ======>>>>>>>>", "color:orange;", this.$data);
+          console.log("%c ======>>>>>>>>", "color:orange;", res.data);
+          this.imgurledit= res.data.image
           this.input = res.data.goodsName;
           this.textarea = res.data.remarks;
           this.inputmoeny = res.data.price;
           this.category = res.data.category;
-          this.dialogImageUrl = res.data.image;
+          this.dialogImageUrl =
+            "http://42.192.152.16:8080/" + "imageUpload/" + res.data.image;
+          this.categoryedit = res.data.category;
         }
       } catch (error) {
         console.log("%c ======>>>>>>>>", "color:orange;", error);
@@ -389,5 +394,32 @@ export default {
       width: 120px;
     }
   }
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 150px;
+  height: 150px;
+  display: block;
+  position: absolute;
+  left: 35%;
+  top: 63%;
 }
 </style>

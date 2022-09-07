@@ -149,7 +149,8 @@ export default {
       selectlist: "",
       selectvalue: "",
       objeditobj: {},
-      imgurlpohto:'',
+      imgurlpohto: "",
+      imgditepohto: "", //编辑不修改上传的图片
     };
   },
 
@@ -164,7 +165,7 @@ export default {
       this.imgurlpohto = value;
     },
     // 编辑种类
-    editcateger() {
+    editcateger(value) {
       const dom = this.$refs.asss;
       dom.active = dom.active - 1;
       this.active = dom.active;
@@ -191,6 +192,8 @@ export default {
       if (this.active === 2) {
         // details当前输入框的值
         const details = this.$refs.details.$data;
+        console.log('%c ======>>>>>>>>','color:orange;',details.imgurledit)
+        this.imgditepohto = details.imgurledit;
         this.selectvalue = details.category;
         const objedit = {
           category: this.selectvalue,
@@ -198,7 +201,7 @@ export default {
           id: data.rowId,
           price: details.inputmoeny,
           remarks: details.textarea,
-          image: this.imgurlpohto
+          image: this.imgurlpohto,
         };
         this.objeditobj = objedit;
         if (data && data.isEdit === "true") {
@@ -228,9 +231,14 @@ export default {
     async editproducts() {
       try {
         const objeditobj1 = this.objeditobj;
+        // objeditobj1.image = this.imgditepohto; //做一个判断，没有修改是传这个，点击修改是传imgurlpohto
+        if(objeditobj1.image === ''){
+          objeditobj1.image = this.imgditepohto;
+        }else{
+          objeditobj1.image = this.imgurlpohto;
+        }
         const objeditobj2 = JSON.stringify(objeditobj1);
-        const idd = Number(objeditobj1.id);
-        const res = await this.$axios.editproduct({ ...objeditobj1, id: idd });
+        const res = await this.$axios.editproduct(objeditobj2);
         if (res.code === 200) {
           this.ishow = false;
           // 要将修改后的list返回给tablelist从新渲染表格
@@ -255,8 +263,8 @@ export default {
         } else if (this.selectlist.length === 3) {
           objeditobj1.category = this.selectlist[2];
         }
-        console.log("%c ======>>>>>>>>", "color:orange;", objeditobj1);
-        const res = await this.$axios.addproudct(objeditobj1);
+        const objeditobj2 = JSON.stringify(objeditobj1);
+        const res = await this.$axios.addproudct(objeditobj2);
         if (res.code === 200) {
           this.ishow = false;
           const dom = this.$refs.asss;

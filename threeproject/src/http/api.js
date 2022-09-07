@@ -1,6 +1,7 @@
 import {
   fetch,
-  post
+  post,
+  filePost
 } from './isAxios'
 
 export const server = {
@@ -46,5 +47,9 @@ export const server = {
   // 商品评论回显
   showconetent(data){
     return fetch('/comment/selectAllById',data)
+  },
+  // 图片上传的接口
+  uploadimg(data){
+    return filePost('/goods/imageUpload',data)
   }
 }
