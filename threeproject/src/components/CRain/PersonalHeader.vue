@@ -14,11 +14,14 @@
         src="../../assets/images/accountPic.png"
         v-if="security || personal"
       />
-      <router-link to='/SecuritySetting'>
-        <span v-if="personal">安全设置</span>
-      </router-link>
+      <span v-if="personal" @click="goToSecuritySetting">安全设置</span>
       <span v-if="security" @click="goToPersonalData">个人资料</span>
-      <span v-if="mphone || opwd || newpwd" @click="goToLogin" class="font-size-color">登陆</span>
+      <span
+        v-if="mphone || opwd || newpwd"
+        @click="goToLogin"
+        class="font-size-color"
+        >登陆</span
+      >
       <span v-if="mpassword" @click="goToHomePage" class="font-size-color"
         >返回首页</span
       >
@@ -38,22 +41,17 @@ export default {
       console.log("goTohomePage");
     },
     /* 跳转到安全设置页 */
-    flushCom() {
-      console.log("goToLoginPage");
-      this.$router.go(0);
+    goToSecuritySetting() {
+      this.$router.push("/SecuritySetting");
     },
     /* 跳转到个人资料页 */
     goToPersonalData() {
-      console.log("goToPersonalDataPage");
+      this.$router.push('/PersonalData');
     },
     /* 跳转到登陆页 */
     goToLogin() {
-      console.log("goToLoginPage");
+      this.$router.push("/Login");
     },
-    /* 跳转到首页 */
-    /* goToHomePage(){
-      console.log('goToHomePage');
-    } */
   },
   props: {
     security: {

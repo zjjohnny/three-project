@@ -21,17 +21,34 @@
         <div class="input-box">
           <div class="account-password-box">
             <img src="../../assets/images/accountPic.png" />
-            <input type="text" placeholder="请输入账号" v-model="account" />
+            <input
+              style="width: 100%"
+              type="text"
+              placeholder="请输入账号"
+              v-model="account"
+            />
           </div>
           <div class="account-password-box">
             <img src="../../assets/images/passwordPic.png" />
-            <input type="text" placeholder="请输入密码" v-model="password" />
+            <input
+              style="width: 100%"
+              type="password"
+              placeholder="请输入密码"
+              v-model="password"
+            />
           </div>
+        </div>
+        <!-- 用户名或密码输入错误 -->
+        <div class="err-box" v-if="showerr">
+          账号或密码输入错误，请确认后再试！
         </div>
         <!-- 勾选框+忘记密码 -->
         <div class="check-box">
           <div><input type="checkbox" />记住密码</div>
-          <div>忘记密码？</div>
+          <div @click="goToRetrievePassword">忘记密码？</div>
+          <!-- <router-link to="RetrievePassword">
+            <div>忘记密码？</div>
+          </router-link> -->
         </div>
         <!-- 登录按钮 -->
         <div class="login-btn">
@@ -45,23 +62,49 @@
       </div>
       <img src="../../assets/images/loginBgcPic.png" />
     </div>
+    <!-- <img :src="`http://42.192.152.16:8080/ssmTwo/image/1.png`" /> -->
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "Login",
   data() {
     return {
       account: "",
       password: "",
+      showerr: false,
+      headeer: "",
     };
   },
   methods: {
-    UserLogin() {
+    ...mapActions("m_user", ["updateToken", "saveUserInfo"]),
+    /* 点击登录 */
+    async UserLogin() {
       console.log(this.account, this.password);
+      const res = await this.$axios({
+        method: "post",
+        url: "http://42.192.152.16:8080/ssmTwo/checkLogin",
+        params: {
+          userId: this.account,
+          userPassword: this.password,
+        },
+      });
+      console.log(res);
+      if (res.data.code !== 0) return (this.showerr = true);
+      /* 将用户token存储到store和本地 */
+      this.updateToken(res.data.data.token);
+      /* 将用户信息存储到store */
+      this.saveUserInfo(res.data.data.user);
+    },
+    /* 点击忘记密码 */
+    goToRetrievePassword() {
+      this.$router.push("/RetrievePassword");
     },
   },
+  computed: {},
+  mounted() {},
 };
 </script>
 
@@ -91,14 +134,10 @@ img {
   padding: 30px;
   position: absolute;
   background-color: #fff;
-  /* top: 186px; */
-  /* left: 450px; */
   top: 50%;
   left: 50%;
   margin-left: -180px;
   margin-top: -201px;
-  /*  transform: translateX(-50%);
-  transform: translateY(-50%); */
   border-radius: 20px;
 }
 .herder-box {
@@ -150,6 +189,7 @@ img {
   font-size: 14px;
   color: #333333;
   padding: 0 20px;
+  cursor: pointer;
 }
 .check-box input {
   margin-right: 5px;
@@ -179,5 +219,9 @@ img {
 .footer-text-box .last-box {
   margin-top: 20px;
   margin-left: 85px;
+}
+.err-box {
+  font-size: 13px;
+  color: red;
 }
 </style>

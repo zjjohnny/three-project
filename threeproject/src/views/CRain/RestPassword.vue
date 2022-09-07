@@ -16,7 +16,7 @@
             <td>
               <input
                 type="text"
-                v-model="inpuval"
+                v-model="inputval"
                 placeholder="手机/邮箱/会员名"
               />
             </td>
@@ -29,8 +29,16 @@
             <td>
               <input type="text" v-model="newCode" placeholder="请输入验证码" />
             </td>
+            <td v-if="showerr">
+              <span style="font-size: 13px; color: red; margin-left: 20px"
+                >*验证码输入错误</span
+              >
+            </td>
           </tr>
         </table>
+        <span v-if="showerr1" style="font-size: 13px; color: red"
+          >*登录名不能为空</span
+        >
         <button class="save-btn" @click="goToNext">下一步</button>
         <div style="font-size: 14px; color: #333333">
           若无法验证，您可以联系管理员进行找回密码
@@ -42,23 +50,38 @@
 
 <script>
 import PersonalHeader from "../../components/CRain/PersonalHeader";
+import { mapState } from "vuex";
 
 export default {
   name: "RestPassword",
   data() {
     return {
       username: "CRain",
-      inpuval: "",
+      inputval: "",
       newCode: "",
+      showerr: false,
+      showerr1: false,
+      randCode: "",
     };
   },
   methods: {
-    getCode() {
-      console.log("获取验证码");
+    /* 获取验证码 */
+    async getCode() {
+      const res = await this.$axios({
+        method: "get",
+        url: "http://42.192.152.16:8080/ssmTwo/getRandCode",
+      });
+      if (res.data.code !== 0) return;
+      console.log(res.data.data);
+      this.randCode = res.data.data;
     },
-    goToNext(){
-      console.log('输入正确进入设置新密码页面');
-    }
+    goToNext() {
+      if (this.inputval == "") return (this.showerr1 = true);
+      this.showerr1 = false;
+      if (this.newCode !== this.randCode || this.randCode == "")
+        return (this.showerr = true);
+      this.$router.push("/NewPassword");
+    },
   },
   components: {
     PersonalHeader,

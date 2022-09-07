@@ -15,6 +15,7 @@
                 type="text"
                 v-model="newPhone"
                 placeholder="请输入新的手机号码"
+                maxlength="11"
               />
             </td>
             <td>
@@ -51,8 +52,12 @@ export default {
   },
   methods: {
     /* 获取验证码 */
-    getCode() {
-      console.log("getCode");
+    async getCode() {
+      const res = await this.$axios({
+        method: "get",
+        url: "http://132.232.110.185/ssmTwo/getRandCode",
+      });
+      console.log(res);
     },
     /* 保存 */
     saveModify() {

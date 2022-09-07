@@ -49,7 +49,6 @@
         <button @click="saveModify">保存</button>
       </div>
     </div>
-    <!-- <router-view></router-view> -->
   </div>
 </template>
 
@@ -66,6 +65,7 @@ export default {
   methods: {
     saveModify() {
       console.log(this.userName, this.userAddress);
+      this.$router.push("/RestPassword");
     },
     getUserSex(val) {
       console.log(val);

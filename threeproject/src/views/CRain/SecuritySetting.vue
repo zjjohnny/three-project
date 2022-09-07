@@ -83,15 +83,17 @@ export default {
   methods: {
     /* 修改手机号 */
     modifyPhone() {
-      console.log("modifyPhone");
+      // console.log("modifyPhone");
+      this.$router.push("/ModifyPhone");
     },
     /* 修改密码 */
-    modifyPassowrd(){
-      console.log('modifyPassowrd');
+    modifyPassowrd() {
+      // console.log('modifyPassowrd');
+      this.$router.push("/ModifyPassword");
     },
   },
   created() {
-    console.log('安全设置页面');
+    console.log("安全设置页面");
   },
   components: {
     PersonalHeader,

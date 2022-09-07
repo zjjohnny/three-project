@@ -4,7 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </nav> -->
-    <!-- <router-view></router-view> -->
+    <router-view></router-view>
 
     <!-- 登录组件 -->
     <!-- <Login></Login> -->
@@ -28,7 +28,13 @@
     <!-- <RestPassword></RestPassword> -->
 
     <!-- 设置新密码 -->
-    <NewPassword></NewPassword>
+    <!-- <NewPassword></NewPassword> -->
+
+    <!-- 操作日志 -->
+    <!-- <OperaLog></OperaLog> -->
+
+    <!-- App反馈 -->
+    <!-- <AppFeedback></AppFeedback> -->
 
     <!-- 测试页面 -->
     <!-- <Test></Test> -->
@@ -44,6 +50,8 @@ import ModifyPassword from "./views/CRain/ModifyPassword";
 import RetrievePassword from "./views/CRain/RetrievePassword";
 import RestPassword from "./views/CRain/RestPassword";
 import NewPassword from "./views/CRain/NewPassword";
+import OperaLog from "./views/CRain/OperaLog";
+import AppFeedback from "./views/CRain/AppFeedback";
 /* 测试页面 */
 import Test from "./views/CRain/Test";
 
@@ -59,6 +67,8 @@ export default {
     RetrievePassword,
     RestPassword,
     NewPassword,
+    OperaLog,
+    AppFeedback,
   },
 };
 </script>

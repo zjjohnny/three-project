@@ -8,7 +8,23 @@
           <tr>
             <td>登录名：</td>
             <td class="second-column">
-              <input type="text" placeholder="手机/邮箱/会员名" />
+              <input
+                type="text"
+                placeholder="手机/邮箱/会员名"
+                v-model="value"
+              />
+            </td>
+            <td>
+              <span
+                v-if="showerr"
+                style="font-size: 13px; color: red; margin-left: 20px"
+                >*该用户不存在</span
+              >
+              <span
+                v-if="shownull"
+                style="font-size: 13px; color: red; margin-left: 20px"
+                >*输入不能为空</span
+              >
             </td>
           </tr>
           <tr>
@@ -23,13 +39,29 @@
 
 <script>
 import PersonalHeader from "../../components/CRain/PersonalHeader";
-
 export default {
   name: "RetrievePassword",
+  data() {
+    return {
+      value: "",
+      showerr: false,
+      shownull: false,
+    };
+  },
   methods: {
-    goToNext(){
-        console.log('goToNext');
-    }
+    /* 点击下一步 */
+    async goToNext() {
+      if (this.value == "") return (this.shownull = true);
+      const res = await this.$axios({
+        method: "get",
+        url: "http://42.192.152.16:8080/ssmTwo/queryUserByUserIdOrPhoneOrEmail",
+        params: {
+          idPhoneE: this.value,
+        },
+      });
+      if (res.status !== 200 || res.data.code !== 0) return (this.showerr = true);
+      this.$router.push("/RestPassword");
+    },
   },
   components: {
     PersonalHeader,
@@ -50,7 +82,7 @@ export default {
   transform: translateX(-50%);
 }
 .content {
-  padding: 50px 100px;
+  padding: 50px 70px;
   text-align: center;
 }
 .content table .second-column {

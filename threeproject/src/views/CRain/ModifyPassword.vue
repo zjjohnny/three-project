@@ -51,6 +51,7 @@ export default {
         this.newPassword = "";
         this.newPassword1 = "";
       }
+      // this.$router.push('/')//跳转到首页
     },
   },
   components: {
