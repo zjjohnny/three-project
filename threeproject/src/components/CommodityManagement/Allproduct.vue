@@ -61,7 +61,23 @@
         }"
       >
         <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column prop="goodsName" label="商品名称" width="250">
+        <el-table-column prop="goodsName" label="商品名称" width="160">
+        </el-table-column>
+        <el-table-column prop="image" label="商品图片" width="160">
+          <template slot-scope="scope">
+            <el-popover placement="top-start" title="" trigger="hover">
+              <img
+                :src="scope.row.image"
+                alt=""
+                style="width: 150px; height: 150px"
+              />
+              <img
+                slot="reference"
+                :src="scope.row.image"
+                style="width: 90px; height: 60px"
+              />
+            </el-popover>
+          </template>
         </el-table-column>
         <el-table-column prop="price" label="商品价格" width="160" sortable>
         </el-table-column>
@@ -85,7 +101,7 @@
         >
           <template slot-scope="scope">{{ scope.row.releaseTime }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="300">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="mini"
               >编辑商品</el-button
@@ -172,7 +188,7 @@ export default {
           isEdit: true,
         },
       });
-  
+
       this.editdata = row;
     },
     // 删除商品
@@ -218,11 +234,12 @@ export default {
           ...this.srceen,
         });
         if (res.code === 200) {
-          // console.log("%c ======>>>>>>>>", "color:orange;", res.data);
+          console.log("%c ======>>>>>>>>", "color:orange;", res.data.list);
           page.total = res.data.total;
           this.tableData = res.data.list;
           this.tableData.forEach((el) => {
             el.price = "￥" + el.price;
+            el.image = "http://42.192.152.16:8080/" + "imageUpload/" + el.image;
           });
         }
       } catch (error) {
@@ -288,7 +305,6 @@ export default {
       });
     },
     // 批量下架
-   
 
     // 发布商品
     launch() {

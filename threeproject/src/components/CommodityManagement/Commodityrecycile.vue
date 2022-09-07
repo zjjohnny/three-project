@@ -20,6 +20,7 @@
             placeholder="请输入内容"
           ></el-input>
         </li>
+        
       </ul>
       <ul class="secdonpart">
         <li>
@@ -53,6 +54,22 @@
       >
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column prop="goodsName" label="商品名称" width="250">
+        </el-table-column>
+        <el-table-column prop="image" label="商品图片" width="160" >
+          <template slot-scope="scope">
+            <el-popover placement="top-start" title="" trigger="hover">
+              <img
+                :src="scope.row.image"
+                alt=""
+                style="width: 150px; height: 150px"
+              />
+              <img
+                slot="reference"
+                :src="scope.row.image"
+                style="width: 90px; height: 60px"
+              />
+            </el-popover>
+          </template>
         </el-table-column>
         <el-table-column prop="category" label="商品分类" width="160">
         </el-table-column>
@@ -145,6 +162,7 @@ export default {
           this.tableData = res.data.list;
           this.tableData.forEach((el) => {
             el.price = "￥" + el.price;
+            el.image = "http://42.192.152.16:8080/" + "imageUpload/" + el.image;
           });
         }
       } catch (error) {
@@ -183,7 +201,7 @@ export default {
     backcangku() {
       // 掉仓库的接口
       if (this.multipleSelection.length == 0) {
-        alert("请选择要删除的数据");
+        alert("请选择要恢复的数据");
       } else {
         //  掉恢复仓库的接口
         this.$confirm("下架的商品将会放到仓库中？", "确认信息", {

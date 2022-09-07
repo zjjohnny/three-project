@@ -8,7 +8,6 @@
         <div>
           <div><i class="el-icon-star-on"></i><span>商品分类</span></div>
           <div>
-            {{category}}
             <div v-if="this.selectlist.length == 3">
               {{ selectlist[0] }}>{{ selectlist[1] }}>{{ selectlist[2] }}
             </div>
@@ -60,10 +59,14 @@
           </div>
           <div>
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action=""
+              :limit="1"
+              :auto-upload="true"
+              :http-request="onRequest"
               list-type="picture-card"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
+              name="image"
             >
               <i class="el-icon-plus"></i>
             </el-upload>
@@ -188,23 +191,29 @@ export default {
       input: "", //商品名称搜索，
       textarea: "", //商品简介
       inputmoeny: "", //商品报价
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶',
-          disabled: true
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }], //下拉框数据的值
+      options: [
+        {
+          value: "选项1",
+          label: "黄金糕",
+        },
+        {
+          value: "选项2",
+          label: "双皮奶",
+          disabled: true,
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎",
+        },
+        {
+          value: "选项4",
+          label: "龙须面",
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭",
+        },
+      ], //下拉框数据的值
       value: "", //下拉框选择的值
       radio: "1", //商品发布单选框的值 1选择 0 没选择
       isradio: "2", //1表示是 2 表示否
@@ -215,11 +224,11 @@ export default {
       category: this.selectlist, //商品分類 是要从上个页面拿到的
       dialogImageUrl: "",
       dialogVisible: false,
+      imageUrl: "", //上传图片的路径
     };
   },
   mounted() {
     const data = this.$route.query;
-    console.log("%c ======>>>>>>>>", "color:orange;", data.rowId);
     // 做回显
     if (data.isEdit) {
       this.editproductsshow(data.rowId);
@@ -241,6 +250,28 @@ export default {
     ...mapState(["roleeidttData"]),
   },
   methods: {
+    onRequest(file) {
+      const files = new FormData();
+      files.append("file", file.file);
+      this.postpicture(files);
+    },
+    // 调用编辑的方法
+    async postpicture(file) {
+      try {
+        const res = await this.$axios.uploadimg(file);
+        if (res.code == 200) {
+          this.imageUrl = res.data;
+          this.$emit("imgurl", this.imageUrl);
+        }
+      } catch (err) {
+        alert(err);
+      }
+    },
+    // handleAvatarSuccess(file) {
+    //   console.log("%c ======>>>>>>>>", "color:orange;", file.raw);
+    //   // this.imageUrl=file.raw;
+    //   this.$emit('imgurl',file.raw);
+    // },
     // 发布商品
     launch() {
       // this.active = this.active + 1;
@@ -251,12 +282,12 @@ export default {
       try {
         const res = await this.$axios.editproductshow({ id });
         if (res.code === 200) {
-          console.log("%c ======>>>>>>>>", "color:red;", res.data);
-          console.log("%c ======>>>>>>>>", "color:orange;", this.$data);
+          // console.log("%c ======>>>>>>>>", "color:orange;", this.$data);
           this.input = res.data.goodsName;
           this.textarea = res.data.remarks;
           this.inputmoeny = res.data.price;
           this.category = res.data.category;
+          this.dialogImageUrl = res.data.image;
         }
       } catch (error) {
         console.log("%c ======>>>>>>>>", "color:orange;", error);
@@ -265,7 +296,7 @@ export default {
 
     //修改种类
     editcateger() {
-      this.$emit("editcateger");
+      this.$emit("editcateger", this.category);
     },
     // 图片加载方法删除
     handleRemove(file, fileList) {

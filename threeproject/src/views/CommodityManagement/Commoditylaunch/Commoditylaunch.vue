@@ -31,6 +31,7 @@
         ref="details"
         :selectlist="selectlist"
         @editcateger="editcateger"
+        @imgurl="imgurl"
       ></commodity-details>
     </div>
     <commodity-susscess v-show="active === 3"> </commodity-susscess>
@@ -146,6 +147,9 @@ export default {
       ishow: true,
       editlist: "",
       selectlist: "",
+      selectvalue: "",
+      objeditobj: {},
+      imgurlpohto:'',
     };
   },
 
@@ -154,12 +158,16 @@ export default {
   },
 
   methods: {
+    // 选择的上传图片
+    imgurl(value) {
+      console.log("%c ======>>>>>>>>", "color:orange;", value);
+      this.imgurlpohto = value;
+    },
     // 编辑种类
     editcateger() {
       const dom = this.$refs.asss;
       dom.active = dom.active - 1;
       this.active = dom.active;
-      console.log("%c ======>>>>>>>>", "color:orange;", this.selectlist);
       // 要将数据回显给穿梭框
     },
 
@@ -177,24 +185,25 @@ export default {
     // 编辑路由跳转传参
     btns() {
       const data = this.$route.query;
-      console.log("%c ======>>>>>>>>", "color:blue;", this.active);
-      if(this.active==3){
+      if (this.active == 3) {
         this.ishow = false;
       }
       if (this.active === 2) {
         // details当前输入框的值
         const details = this.$refs.details.$data;
-        // console.log("%c ======>>>>>>>>", "color:red;", details); 拿到的是details里面的数据
+        this.selectvalue = details.category;
         const objedit = {
-          category: this.selectlist[1],
+          category: this.selectvalue,
           goodsName: details.input,
           id: data.rowId,
           price: details.inputmoeny,
           remarks: details.textarea,
+          image: this.imgurlpohto
         };
+        this.objeditobj = objedit;
         if (data && data.isEdit === "true") {
           console.log("%c ======>>>>>>>>", "color:orange;", objedit);
-          this.editproducts(objedit);
+          this.editproducts();
         } else {
           // 调用新建的接口
           // 新建要做正则
@@ -202,11 +211,9 @@ export default {
             alert("请输入名称!");
           } else if (objedit.price === "") {
             alert("请输入价格");
-          } else if (objedit.category === "") {
-            alert("请选择商品分类");
           } else {
             console.log("%c ======>>>>>>>>", "color:orange;", this.active);
-            this.addproducts(objedit);
+            this.addproducts();
           }
         }
         return false;
@@ -218,18 +225,20 @@ export default {
     },
 
     // 编辑的接口
-    async editproducts(obj) {
+    async editproducts() {
       try {
-        const res = await this.$axios.editproduct(obj);
+        const objeditobj1 = this.objeditobj;
+        const objeditobj2 = JSON.stringify(objeditobj1);
+        const idd = Number(objeditobj1.id);
+        const res = await this.$axios.editproduct({ ...objeditobj1, id: idd });
         if (res.code === 200) {
-          this.ishow=false
+          this.ishow = false;
           // 要将修改后的list返回给tablelist从新渲染表格
           console.log("%c ======>>>>>>>>", "color:orange;", res);
           const dom = this.$refs.asss;
           dom.active = dom.active + 1;
           this.active = dom.active;
           // 需调用列表接口
-          
         }
       } catch (error) {
         alert(error);
@@ -237,12 +246,19 @@ export default {
     },
 
     // 新增接口
-    async addproducts(obj) {
+    async addproducts() {
       try {
-        //
-        const res = await this.$axios.addproudct(obj);
+        //传数据
+        const objeditobj1 = this.objeditobj;
+        if (this.selectlist.length === 2) {
+          objeditobj1.category = this.selectlist[1];
+        } else if (this.selectlist.length === 3) {
+          objeditobj1.category = this.selectlist[2];
+        }
+        console.log("%c ======>>>>>>>>", "color:orange;", objeditobj1);
+        const res = await this.$axios.addproudct(objeditobj1);
         if (res.code === 200) {
-          this.ishow=false
+          this.ishow = false;
           const dom = this.$refs.asss;
           dom.active = dom.active + 1;
           this.active = dom.active;
