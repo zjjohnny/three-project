@@ -5,11 +5,11 @@
             <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPage4"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="100"
+            
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="page.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="40">
+            :total="pageTotal">
             </el-pagination>
         </div>
     </div>
@@ -18,20 +18,26 @@
 <script>
 export default{
     name: 'GoodsPage',
+    props:['pageTotal'],
     data(){
         return{
-            currentPage1: 5,
-            currentPage2: 5,
-            currentPage3: 5,
-            currentPage4: 4
+            page:{
+                currentPage: 1,
+                pageSize: 5
+            }
+           
         }
     },
     methods: {
         handleSizeChange(val) {
+            this.page.pageSize = val;
             console.log(`每页 ${val} 条`);
+            this.$emit('pageChange', this.page)
         },
         handleCurrentChange(val) {
+            this.page.currentPage = val;
             console.log(`当前页: ${val}`);
+            this.$emit('pageChange',this.page);
         }
     }
 }

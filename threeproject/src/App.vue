@@ -14,10 +14,10 @@
   </div>
 </template>
 <script>
-  import Order from '@/views/OrderManagment.vue'
-  import Refund from '@/views/RefundManagment.vue'
-  import RefundDetail from '@/views/RefundDetail.vue'
-  import UserData from '@/views/UserData.vue'
+  import Order from '@/views/pll/OrderManagment.vue'
+  import Refund from '@/views/pll/RefundManagment.vue'
+  import RefundDetail from '@/views/pll/RefundDetail.vue'
+  import UserData from '@/views/pll/UserData.vue'
 
   export default{
     name: 'App',

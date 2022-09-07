@@ -13,28 +13,19 @@
                 </tr>
                 
                 <tr class="table-contanier" v-for="item in dataTableContainer"  v-if="dataTableHead.length ==6">
-                    <td><img :src="item.user_img" class="user_img"></td>
-                    <td>{{item.user_name}}</td>
-                    <td>{{item.user_account}}</td>
-                    <td>{{item.user_phone}}</td>
-                    <td>{{item.user_level}}</td>
-                    <td>{{item.user_retime}}</td>
-                
-                    <!-- <td><img src="../../assets/userImg.jpg" alt="" class="user_img"></td>
-                    <td>一只羊</td>
-                    <td>admin123</td>
-                    <td>18000000000</td>
-                    <td>1</td>
-                    <td>2021-10-20 10：13</td> -->
+                    <td><img src="http://42.192.152.16:8080/ssmTwo/image/1.png" class="user_img" /></td>
+                    <td>{{item.storeName}}</td>
+                    <td>{{item.storeAccount}}</td>
+                    <td>{{item.phoneNum}}</td>
+                    <td>{{item.storeLevel}}</td>
+                    <td>{{item.createTime}}</td>
                 </tr>
                 <tr class="table-contanier" v-for="item in dataTableCont" v-if="dataTableHead.length ==5">
-                    <!-- <td><img :src="item.goods_img" class="goods_img"></td> -->
-                    <td><img src="../../assets/userImg.jpg" alt="" width="50px"></td>
-                    <td>{{item.goods_name}}</td>
-                    <td>{{item.goods_visit_time}}</td>
-                    <td>{{item.goods_buyed_num}}</td>
-                    <td>{{item.goods_percent_conversion}}</td>
-                    
+                    <td><img :src="`http://42.192.152.16:8080/imageUpload/${item.image}`" width="50px"></td>
+                    <td>{{item.goodsName}}</td>
+                    <td>{{item.hits}}</td>
+                    <td>{{item.sales}}</td>
+                    <td>{{item.conversionRate}}</td>
                 </tr>
             </table>
         </div>

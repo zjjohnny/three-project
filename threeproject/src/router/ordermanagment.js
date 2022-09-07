@@ -2,7 +2,7 @@ export default[
     {
         path: '/OrderManagment',
         name: 'OrderManagment',
-        component: () => import('@/views/OrderManagment.vue'),
+        component: () => import('@/views/pll/OrderManagment.vue'),
         children: [
             {
                 path: '/',
@@ -20,7 +20,7 @@ export default[
     {
         path: '/RefundManagment',
         name: 'RefundManagment',
-        component: () => import('@/views/RefundManagment.vue'),
+        component: () => import('@/views/pll/RefundManagment.vue'),
         children: [
             {
                 path: '/',
@@ -38,22 +38,22 @@ export default[
     {
         path: '/RefundDetail',
         name: 'RefundDetail',
-        component: () => import('@/views/RefundDetail.vue')
+        component: () => import('@/views/pll/RefundDetail.vue')
     },
     {
         path: '/UserData',
         name: 'UserData',
-        component: () => import('@/views/UserData.vue')
+        component: () => import('@/views/pll/UserData.vue')
     },
     {
         path: '/UserActive',
         name: 'UserActive',
-        component: () => import('@/views/UserActive.vue')
+        component: () => import('@/views/pll/UserActive.vue')
     },
     {
         path: '/BusinessData',
         name: 'BusinessData',
-        component: () => import('@/views/BusinessData.vue')
+        component: () => import('@/views/pll/BusinessData.vue')
     },
     
 ]

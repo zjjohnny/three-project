@@ -2,7 +2,7 @@
     <div>
         <div class="refund-mgt-title">
             <div class="goBack" @click="goBack">
-                <img src="../assets/fanhui.png" alt="">
+                <img src="../../assets/fanhui.png" alt="">
                 <span>返回</span>
             </div>
             <div>退款详情-关闭{{}}</div>
