@@ -31,7 +31,7 @@
     <!-- <NewPassword></NewPassword> -->
 
     <!-- 操作日志 -->
-    <!-- <OperaLog></OperaLog> -->
+    <OperaLog></OperaLog>
 
     <!-- App反馈 -->
     <!-- <AppFeedback></AppFeedback> -->

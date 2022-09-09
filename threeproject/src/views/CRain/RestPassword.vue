@@ -5,10 +5,12 @@
       <div class="title-box">重置密码</div>
       <div class="container">
         <div class="tips-text">
-          您正在对{{ username }}账号进行修改手机操作，请谨慎操作
+          您正在对&nbsp;{{
+            userInfo.userName
+          }}&nbsp;账号进行修改手机操作，请谨慎操作
         </div>
         <span style="font-size: 14px; color: #333333"
-          >点击获取验证码，短信将发送至安全手机*******1234</span
+          >点击获取验证码，短信将发送至安全手机&nbsp;{{ userPhone }}</span
         >
         <table>
           <tr>
@@ -67,6 +69,7 @@ export default {
   methods: {
     /* 获取验证码 */
     async getCode() {
+      if(this.inputval == "") return alert('请输入用户名')
       const res = await this.$axios({
         method: "get",
         url: "http://42.192.152.16:8080/ssmTwo/getRandCode",
@@ -81,6 +84,14 @@ export default {
       if (this.newCode !== this.randCode || this.randCode == "")
         return (this.showerr = true);
       this.$router.push("/NewPassword");
+    },
+  },
+  computed: {
+    ...mapState("m_user", ["userInfo"]),
+    userPhone() {
+      const userPhone = this.$store.state.m_user.userInfo.userPhone;
+      return userPhone;
+      // return this.$store.getters["m_user/userPhone"];
     },
   },
   components: {

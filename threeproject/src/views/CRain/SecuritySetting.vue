@@ -7,15 +7,15 @@
       <table>
         <tr>
           <td class="first-column">会员名：</td>
-          <td class="second-column">{{ name }}</td>
+          <td class="second-column">{{ userInfo.userName }}</td>
         </tr>
         <tr>
           <td>登录邮箱：</td>
-          <td>123***456</td>
+          <td>{{ userInfo.userEmail }}</td>
         </tr>
         <tr>
           <td>已绑定手机：</td>
-          <td>123****456</td>
+          <td>{{ userInfo.userPhone }}</td>
           <td>
             <span class="modify-btn" @click="modifyPhone">修改手机</span>
           </td>
@@ -71,29 +71,27 @@
 
 <script>
 import PersonalHeader from "../../components/CRain/PersonalHeader";
-
+import { mapState } from "vuex";
 export default {
   name: "SecuritySetting",
   data() {
     return {
       name: "CRain",
-      percentage: 50,
+      percentage: 100,
     };
   },
   methods: {
     /* 修改手机号 */
     modifyPhone() {
-      // console.log("modifyPhone");
       this.$router.push("/ModifyPhone");
     },
     /* 修改密码 */
     modifyPassowrd() {
-      // console.log('modifyPassowrd');
       this.$router.push("/ModifyPassword");
     },
   },
-  created() {
-    console.log("安全设置页面");
+  computed: {
+    ...mapState("m_user", ["userInfo"]),
   },
   components: {
     PersonalHeader,

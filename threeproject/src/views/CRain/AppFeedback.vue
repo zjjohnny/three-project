@@ -25,12 +25,17 @@
                 placeholder="请输入关键字，回车搜索"
                 prefix-icon="el-icon-search"
                 v-model="input1"
+                @keyup.enter.native="searchEnterFun"
               >
               </el-input>
             </td>
             <!-- 系统 -->
             <td>
-              <el-select v-model="systemValue" placeholder="所有系统">
+              <el-select
+                v-model="systemValue"
+                placeholder="所有系统"
+                @change="getSystem"
+              >
                 <el-option
                   v-for="item in allSystem"
                   :key="item.value"
@@ -42,7 +47,11 @@
             </td>
             <!-- 状态 -->
             <td>
-              <el-select v-model="statusValue" placeholder="全部状态">
+              <el-select
+                v-model="statusValue"
+                placeholder="全部状态"
+                @change="getStatus"
+              >
                 <el-option
                   v-for="item in allStatus"
                   :key="item.value"
@@ -70,9 +79,17 @@
         <div class="opera-box">
           <table>
             <tr>
-              <td><input type="checkbox" />全选</td>
-              <td><i class="el-icon-edit"></i>批量回复</td>
-              <td><i class="el-icon-delete" color="#c00000"></i>批量删除</td>
+              <td><input type="checkbox" @change="selectAll" />全选</td>
+              <td>
+                <span @click="batchReply"
+                  ><i class="el-icon-edit"></i>批量回复</span
+                >
+              </td>
+              <td>
+                <span @click="batchDelete"
+                  ><i class="el-icon-delete" color="#c00000"></i>批量删除</span
+                >
+              </td>
             </tr>
           </table>
         </div>
@@ -90,7 +107,11 @@
             <!-- 用户信息 -->
             <div class="user-info">
               <div class="checkbox">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  @change="isChecked(item.sugId)"
+                  :checked="item.isChecked"
+                />
               </div>
               <!-- 用户头像和昵称 -->
               <div class="header-nickname">
@@ -116,7 +137,7 @@
             <!-- 反馈内容 -->
             <div class="pub-content-box">
               <!-- 建议类别 -->
-              <div class="proposal-box">[功能建议]</div>
+              <div class="proposal-box">[{{ item.sugType }}]</div>
               <!-- 建议内容 -->
               <div class="proposal-content">
                 <!-- 为什么不能在app上抽奖，打开app的时候，希望首页能够多做点运营方面的活动，给我们广大顾客朋友多发点优惠券，希望贵司能够采纳，谢谢哈！阿斯顿发送到发士大夫士大夫撒旦法撒旦法撒旦法撒旦法撒旦 -->
@@ -143,12 +164,13 @@
                 <!-- 头像 -->
                 <img src="../../assets/images/headerPic.png" />
                 <!-- 昵称 -->
-                <span>{{ item1.user.userName }}</span>
+                <span>客服1</span>
+                <!-- <span>{{ item1.user.userName }}</span> -->
               </div>
               <!-- 回复时间 -->
               <div class="reply-time">
-                <span>2021-12-01</span>&nbsp;&nbsp;
-                <span>14:00</span>
+                <span>{{ item1.replyCreateTime }}</span>
+                <!-- <span>14:00</span> -->
               </div>
               <!-- <p class="clearboth"></p> -->
             </div>
@@ -167,7 +189,7 @@
 
 <script>
 import Modal from "../../components/CRain/Modal.vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   components: { Modal },
   name: "AppFeedback",
@@ -176,30 +198,30 @@ export default {
       input1: "",
       allSystem: [
         {
-          value: "选项1",
+          value: "所有系统",
           label: "所有系统",
         },
         {
-          value: "选项2",
+          value: "IOS系统",
           label: "IOS系统",
         },
         {
-          value: "选项3",
+          value: "安卓系统",
           label: "安卓系统",
         },
       ],
       systemValue: "",
       allStatus: [
         {
-          value: "选项1",
+          value: "全部状态",
           label: "全部状态",
         },
         {
-          value: "选项2",
+          value: "已回复",
           label: "已回复",
         },
         {
-          value: "选项3",
+          value: "未回复",
           label: "未回复",
         },
       ],
@@ -228,47 +250,156 @@ export default {
       ],
       timeValue: "",
       showMessage: false,
+      sugId: null,
+      querySuggest: {
+        comment: "",
+        sugState: "",
+        systemId: "",
+      },
     };
   },
   methods: {
-    ...mapActions("m_feedback", ["saveUserFeedBack"]),
+    ...mapActions("m_feedback", [
+      "saveUserFeedBack",
+      "checkAll",
+      "updateIsChecked",
+    ]),
 
     /* 获取用户反馈 */
-    async getUserFeedback() {
+    async getUserFeedback(obj) {
       const res = await this.$axios({
         method: "get",
-        url: "http://132.232.110.185/ssmTwo/querySuggestAll",
+        url: "http://42.192.152.16:8080/ssmTwo/querySuggestAll",
+        params: {
+          comment: obj.comment,
+          sugState: obj.sugState,
+          systemId: obj.systemId,
+        },
       });
-      if (res.data.code !== 0) return;
-      /* 将用户反馈存入store */
+      console.log(res);
+      if (res.data.code !== 0) return alert("获取数据失败");
+      if (res.data.data.length == 0) {
+        this.querySuggest.comment = "";
+        this.querySuggest.systemId = "";
+        this.querySuggest.sugState = "";
+        // this.getUserFeedback(this.getUserFeedback);
+        return alert("暂无数据");
+      }
+      // 将用户反馈存入store
       this.saveUserFeedBack(res.data.data);
-      console.log(this.feedBackList);
     },
-    /* 回复按钮 */
+
+    /* 回复评论 */
+    // 回复按钮
     replyContent(sugId) {
-      console.log("回复用户反馈",sugId);
+      this.sugId = sugId;
       this.showMessage = true;
     },
-    /* 模态框确定按钮 */
-    modalConfirm(value) {
-      console.log("点击了确定按钮", value);
+    // 模态框确定按钮
+    async modalConfirm(value) {
+      const res = await this.$axios({
+        method: "post",
+        url: "http://42.192.152.16:8080/ssmTwo/insertReplyComment",
+        params: {
+          sugId: this.sugId,
+          "user.userId": 1360084900, //合并项目后这里还要修改，从store中获取当前用户的id
+          replyComment: value,
+        },
+      });
+      if (res.data.code !== 0) return alert("获取数据失败");
       this.showMessage = false;
     },
-    /* 模态框取消按钮 */
+
+    // 模态框取消按钮
     modalClose() {
       console.log("点击了取消按钮");
       this.showMessage = false;
     },
+    // 回车搜索
+    async searchEnterFun(e) {
+      if (e.target.value == "") return;
+      if (e.keyCode == 13) {
+        this.querySuggest.comment = e.target.value;
+        this.getUserFeedback(this.querySuggest);
+      }
+    },
+    //是否回复下拉框
+    getStatus(e) {
+      if (e == "全部状态") {
+        this.querySuggest.comment = "";
+        this.querySuggest.sugState = "";
+        this.querySuggest.systemId = "";
+        this.getUserFeedback(this.querySuggest);
+      } else if (e == "已回复") {
+        this.querySuggest.sugState = 1;
+        this.getUserFeedback(this.querySuggest);
+      } else if (e == "未回复") {
+        this.querySuggest.sugState = 0;
+        this.getUserFeedback(this.querySuggest);
+      }
+    },
+    //手机系统下拉框
+    getSystem(e) {
+      if (e == "所有系统") {
+        this.querySuggest.comment = "";
+        this.querySuggest.sugState = "";
+        this.querySuggest.systemId = "";
+        this.getUserFeedback(this.querySuggest);
+      } else if (e == "IOS系统") {
+        this.querySuggest.systemId = 0;
+        this.getUserFeedback(this.querySuggest);
+      } else if (e == "安卓系统") {
+        this.querySuggest.systemId = 1;
+        this.getUserFeedback(this.querySuggest);
+      }
+    },
+    /* 修改当前评论的选中状态 */
+    isChecked(value) {
+      this.updateIsChecked(value);
+    },
+    //全选按钮
+    selectAll(e) {
+      this.checkAll(e.target.checked);
+    },
+    //批量回复
+    async batchReply() {
+      /* const checkedList = this.checkedCount;
+      this.showMessage = true;
+      const res = await this.$axios({
+        method: 'POST',
+        url:'http://42.192.152.16:8080/ssmTwo/insertReplyComments',
+        params:{
+          sugIds: checkedList
+        }
+      });
+      console.log(res); */
+    },
+    //批量删除
+    async batchDelete() {
+      const checkedList = this.checkedCount;
+      console.log(checkedList);
+      let url = "http://42.192.152.16:8080/ssmTwo/batchDeleteBySugIds?";
+      checkedList.forEach((item) => {
+        url += "sugIds=" + item + "&";
+      });
+      url = url.substring(0, url.length - 1);
+      console.log(url);
+      /* console.log(url);
+      const res = await this.$axios({
+        method: "post",
+        url: url,
+      });
+      console.log(res); */
+    },
   },
   computed: {
     /* 从store中获取用户反馈列表 */
-    // ...mapState('m_feedback', ['feedBackList'])
-    feedBackList() {
-      return this.$store.state.m_feedback.feedBackList;
-    },
+    ...mapState("m_feedback", ["feedBackList"]),
+    ...mapState("m_user", ["userInfo"]),
+    ...mapGetters("m_feedback", ["checkedCount"]),
   },
   mounted() {
-    this.getUserFeedback();
+    this.getUserFeedback(this.querySuggest);
   },
   components: {
     Modal,

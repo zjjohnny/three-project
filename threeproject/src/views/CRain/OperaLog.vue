@@ -5,12 +5,11 @@
       <table>
         <tr>
           <td>操作人</td>
-          <td><input type="text" /></td>
+          <td><input type="text" v-model="value1" /></td>
           <td>操作日期</td>
           <td>
             <!-- <input type="text" /> -->
             <el-date-picker
-              v-model="value1"
               type="daterange"
               range-separator="-"
               start-placeholder="开始日期"
@@ -25,7 +24,15 @@
       </table>
       <!-- 表格内容区域 -->
       <div>
-        <el-table :data="tableData" style="width: 100%">
+        <el-table
+          :data="
+            tableData.slice(
+              (currentPage - 1) * pageSize,
+              currentPage * pageSize
+            )
+          "
+          style="width: 100%"
+        >
           <el-table-column
             prop="operaPersonal"
             label="操作人"
@@ -49,9 +56,9 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :current-page="currentPage"
+          :page-sizes="[20, 40, 60]"
+          :page-size="20"
           layout="total, sizes, prev, pager, next, jumper"
           :total="400"
         >
@@ -67,71 +74,57 @@ export default {
   data() {
     return {
       value1: "",
-      tableData: [
-        {
-          operaPersonal: "夏弥",
-          path: "首页-发布商品",
-          operaName: "发布商品",
-          operaDate: "2021-06-27 14:40",
-          address: "322.240.184.100",
-        },
-        {
-          operaPersonal: "夏弥",
-          path: "商品管理-编辑商品",
-          operaName: "编辑商品",
-          operaDate: "2021-06-27 14:40",
-          address: "322.240.184.100",
-        },
-        {
-          operaPersonal: "夏弥",
-          path: "首页-发布商品",
-          operaName: "发布商品",
-          operaDate: "2021-06-27 14:40",
-          address: "322.240.184.100",
-        },
-        {
-          operaPersonal: "夏弥",
-          path: "首页-发布商品",
-          operaName: "发布商品",
-          operaDate: "2021-06-27 14:40",
-          address: "322.240.184.100",
-        },
-      ],
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
+      tableData: [],
+      currentPage: 1,
+      //每页显示条数
+      pageSize: 20,
     };
   },
   methods: {
+    /* 搜索按钮 */
     searchBtn() {
-      console.log(this.value1);
+      this.getOperaLog(this.pageSize, this.currentPage, this.value1);
     },
+    /* 每页显示多少条 */
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      this.currentPage = 1;
     },
+    /* 当前是第几页 */
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      //重新调用接口获取当页数据
+      this.getOperaLog(this.pageSize, this.currentPage, "");
     },
-    getOperaLog() {
-      this.$axios({
+    async getOperaLog(pageSize, currentPage, userName) {
+      const res = await this.$axios({
         method: "get",
         url: "http://132.232.110.185/ssmTwo/queryUserLoggerByPage",
         params: {
-          limit: "1",
-          page: "1",
+          limit: pageSize,
+          page: currentPage,
+          "user.userName": userName,
         },
-      })
-        .then(
-          (res) => {
-            console.log(res);
-          },
-          (err) => {}
-        );
+      });
+      for (let i = 0; i < res.data.data.length; i++) {
+        const obj = {
+          operaPersonal: "",
+          path: "",
+          operaName: "",
+          operaDate: "",
+          address: "",
+        };
+        obj.operaPersonal = res.data.data[i].user.userName;
+        // obj.path = res.data.data[i].permission.perName;//返回的数据部分的permission为null
+        obj.operaName = res.data.data[i].detail;
+        obj.operaDate = res.data.data[i].logCreateTime;
+        obj.address = res.data.data[i].ip;
+        this.tableData.push(obj);
+      }
     },
   },
   created() {
-    this.getOperaLog();
+    this.getOperaLog(20, 1, "");
   },
 };
 </script>

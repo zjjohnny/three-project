@@ -82,7 +82,6 @@ export default {
     ...mapActions("m_user", ["updateToken", "saveUserInfo"]),
     /* 点击登录 */
     async UserLogin() {
-      console.log(this.account, this.password);
       const res = await this.$axios({
         method: "post",
         url: "http://42.192.152.16:8080/ssmTwo/checkLogin",
@@ -91,7 +90,7 @@ export default {
           userPassword: this.password,
         },
       });
-      console.log(res);
+      // console.log(res.data.data.user);
       if (res.data.code !== 0) return (this.showerr = true);
       /* 将用户token存储到store和本地 */
       this.updateToken(res.data.data.token);

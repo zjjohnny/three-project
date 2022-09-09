@@ -100,6 +100,7 @@ export default {
       if(!this.isGo) return this.showerr1 = true;
       /* 判断两次密码输入是否相同 */
       if (this.newpassword !== this.newpassword1) return (this.showerr = true);
+      console.log("密码规范，可修改");
       /* 密码不为空 */ 
       const res = await this.$axios({
         method: "post",
@@ -124,14 +125,14 @@ export default {
 .content-container {
   padding: 10px;
   border: 1px solid #efefef;
-  width: 700px;
+  width: 826px;
   position: relative;
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
 .container {
-  padding: 50px 60px;
+  padding: 50px 60px 50px 190px;
 }
 .title-box {
   font-size: 36px;

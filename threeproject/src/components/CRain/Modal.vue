@@ -50,6 +50,7 @@ export default {
     confirm() {
       if (this.textareaValue=='') return alert('回复内容不能为空!')
       this.$emit("confirm", this.textareaValue);
+      this.textareaValue = '';
     },
     cancle() {
       this.$emit("close");

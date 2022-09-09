@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import PersonalHeader from "../../components/CRain/PersonalHeader";
 export default {
   name: "RetrievePassword",
@@ -49,6 +50,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions("m_user", ["saveUserInfo"]),
     /* 点击下一步 */
     async goToNext() {
       if (this.value == "") return (this.shownull = true);
@@ -59,7 +61,10 @@ export default {
           idPhoneE: this.value,
         },
       });
-      if (res.status !== 200 || res.data.code !== 0) return (this.showerr = true);
+      if (res.status !== 200 || res.data.code !== 0)
+        return (this.showerr = true);
+      /* 将用户信息存储到store(没有密码) */
+      this.saveUserInfo(res.data.data);
       this.$router.push("/RestPassword");
     },
   },

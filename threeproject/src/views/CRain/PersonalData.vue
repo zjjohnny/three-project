@@ -2,23 +2,31 @@
   <div>
     <!-- 头部 -->
     <PersonalHeader :personal="true"></PersonalHeader>
+    <div v-if="showSuccess" class="showSuccess">修改成功</div>
     <!-- 修改框 -->
     <div class="modify-box">
-      <span>亲爱的{{ userName }}，填写真实资料会比较利于后台的管理哦</span>
+      <span
+        >亲爱的&nbsp;{{
+          userInfo.userName
+        }}&nbsp;，填写真实资料会比较利于后台的管理哦</span
+      >
       <table>
         <tr class="tr-height">
           <td class="td-width">当前头像：</td>
           <td class="head-portrait">
-            <img src="../../assets/images/accountPic.png" />
-            <router-link to="/SecuritySetting">
-              <div class="modify-btn">修改头像</div>
-            </router-link>
+            <img :src="`http://42.192.152.16:8080/ssmTwo/image/1.png`" />
+            <div class="modify-btn">修改头像</div>
           </td>
         </tr>
         <tr>
           <td>姓名：</td>
           <td>
-            <input type="text" v-model="userName" class="input-box" />
+            <input
+              type="text"
+              v-model="userName"
+              class="input-box"
+              :placeholder="userInfo.userName"
+            />
           </td>
         </tr>
         <tr class="tr-height">
@@ -28,20 +36,27 @@
               type="radio"
               name="sex"
               id="nan"
-              @click="getUserSex('nan')"
+              :checked="userSexM"
+              @click="getUserSex(1)"
             /><label for="nan" class="td-right">男</label>
             <input
               type="radio"
               name="sex"
               id="nv"
-              @click="getUserSex('nv')"
+              :checked="userSexW"
+              @click="getUserSex(0)"
             /><label for="nv">女</label>
           </td>
         </tr>
         <tr>
           <td>居住地址：</td>
           <td>
-            <input type="text" v-model="userAddress" class="input-box" />
+            <input
+              type="text"
+              v-model="userAddress"
+              class="input-box"
+              :placeholder="userInfo.userLocation"
+            />
           </td>
         </tr>
       </table>
@@ -54,21 +69,60 @@
 
 <script>
 import PersonalHeader from "../../components/CRain/PersonalHeader";
+import { mapState } from "vuex";
 export default {
   name: "PersonalData",
   data() {
     return {
-      userName: "CRain",
-      userAddress: "成都市高新区天府二街",
+      userName: "",
+      userAddress: "",
+      impSrc: "",
+      userSex: "",
+      showSuccess: false,
     };
   },
   methods: {
-    saveModify() {
-      console.log(this.userName, this.userAddress);
-      this.$router.push("/RestPassword");
+    /* 点击保存按钮 */
+    async saveModify() {
+      const res = await this.$axios({
+        method: "post",
+        url: "http://42.192.152.16:8080/ssmTwo/updateUser",
+        params: {
+          userName:
+            this.userName == "" ? this.userInfo.userName : this.userName,
+          userSex: this.userSex == "" ? this.userInfo.userSex : this.userSex,
+          userLocation:
+            this.userAddress == ""
+              ? this.userInfo.userLocation
+              : this.userAddress,
+          userId: this.userInfo.userId,
+        },
+      });
+      console.log(res);
+      if (res.data.code !== 0) return alert("修改失败");
+      /* 修改成功，跳转到重置密码页面 */
+      this.showSuccess = true;
+      setTimeout(() => {
+        this.showSuccess = false;
+        this.$router.push("/RestPassword");
+      }, 1000);
     },
+    /* 修改用户性别 */
     getUserSex(val) {
-      console.log(val);
+      this.userSex = val;
+    },
+  },
+  computed: {
+    ...mapState("m_user", ["userInfo"]),
+    userSexM() {
+      const userSex = this.$store.state.m_user.userInfo.userSex;
+      if (userSex == 1) return true;
+      return false;
+    },
+    userSexW() {
+      const userSex = this.$store.state.m_user.userInfo.userSex;
+      if (userSex == 0) return true;
+      return false;
     },
   },
   components: {
@@ -78,6 +132,19 @@ export default {
 </script>
 
 <style scoped>
+.showSuccess {
+  padding: 10px 60px;
+  color: white;
+  font-weight: bold;
+  background-color: black;
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+}
 .modify-box {
   width: 550px;
   padding: 20px 70px;
