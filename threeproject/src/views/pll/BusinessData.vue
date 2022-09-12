@@ -68,13 +68,14 @@ export default{
                     goodsName: this.goods_name
                 },
             });
-            console.log(res);
+            // console.log(res);
             if(res.data.count == 0){
                 alert("未搜索到相关信息")
             }else{
-                console.log(res);
-                this.dataTableContainer = res.data.data;
+                // console.log(res);
+                this.dataTableCont = res.data.data.list;
                 this.pageTotal = res.data.count;
+                // console.log(this.dataTableCont);
             }
         },
         //批量导出
@@ -82,13 +83,20 @@ export default{
             console.log("导出用户数据");
             this.$axios({
                 method: 'get',
-                url: 'http://42.192.152.16:8080/ssmTwo/downloadExclGoods',
+                url: '/api/ssmTwo/downloadExclGoods',
                 params:{
                     page: this.nowPage,
                     limit: this.pageSize,
-                }
+                },
+                responseType: 'blob'
             }).then((res) => {
                 console.log(res);
+                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', '商品数据.xls');
+                document.body.appendChild(link);
+                link.click();
             },
             (err) =>{
                 console.log(err);

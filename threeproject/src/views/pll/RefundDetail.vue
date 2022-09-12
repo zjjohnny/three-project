@@ -5,10 +5,10 @@
                 <img src="../../assets/fanhui.png" alt="">
                 <span>返回</span>
             </div>
-            <div>退款详情-关闭{{}}</div>
+            <div>退款详情-关闭</div>
         </div>
-        <RefundProcess></RefundProcess>
-        <RefundProcessItem></RefundProcessItem>
+        <!-- <RefundProcess></RefundProcess> -->
+        <RefundProcessItem :info="info"></RefundProcessItem>
     </div>
 </template>
 <script>
@@ -20,10 +20,16 @@ export default{
         RefundProcess,
         RefundProcessItem
     },
+    props: ['info'],
     methods:{
         goBack(){
-            this.$router.go(-1)
+            // this.$router.push({name:'GoodsRefundItem'})
+            this.$router.back()
         }
+    },
+    mounted(){
+        // console.log(this.$router);
+        // console.log(this.info);
     }
 }
 </script>

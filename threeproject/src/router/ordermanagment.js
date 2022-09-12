@@ -38,7 +38,12 @@ export default[
     {
         path: '/RefundDetail',
         name: 'RefundDetail',
-        component: () => import('@/views/pll/RefundDetail.vue')
+        component: () => import('@/views/pll/RefundDetail.vue'),
+        props(route){
+            return {
+                info: route.query.info,
+            }
+        }
     },
     {
         path: '/UserData',

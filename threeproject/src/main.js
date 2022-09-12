@@ -12,6 +12,8 @@ Vue.use(ElementUI)
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
+// Vue.prototype.$host="http://42.192.152.16:8080"
+// axios.defaults.baseURL="/api"
 
 new Vue({
   router,

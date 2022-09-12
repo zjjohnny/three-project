@@ -29,6 +29,7 @@ export default{
             //echarts折线图
             mychart: null,
             option: null,
+            dataList:[],
 
             // 用户数据表格信息
             dataTableHead:['用户头像','用户昵称','用户账号','手机号码','用户等级','注册时间'],
@@ -43,7 +44,16 @@ export default{
         this.getUserData();
     },
     methods:{
-        myCharts(){
+        async myCharts(){
+            const res = await this.$axios({
+                method: 'get',
+                url: 'http://42.192.152.16:8080/ssmTwo/storeLineChart'
+            })
+            // console.log(res);
+            for(let i=0; i<res.data.data.length;i++){
+                this.dataList.push(res.data.data[i].count)
+            }
+            // console.log(this.dataList);
             this.mychart = echarts.init(document.getElementById('echartsBox'));
             this.option = {
                 title: {
@@ -57,7 +67,8 @@ export default{
                 },
                 series: [
                     {
-                        data: [1000, 3000, 4000, 4500, 2300,4000,3500],
+                        // data: [1000, 3000, 4000, 4500, 2300,4000,3500],
+                        data: this.dataList,
                         type: 'line',
                         smooth: true,
                         color:'#1296DB',
@@ -68,6 +79,7 @@ export default{
             },
             this.mychart.setOption(this.option)
         },
+        //获取用户数据
         async getUserData(){
             const res = await this.$axios({
                 method: "get",
@@ -79,19 +91,26 @@ export default{
             });
             this.dataTableContainer = res.data.data;
             this.pageTotal = res.data.count;
-            console.log(res);
-            console.log(this.dataTableContainer);
+            // console.log(res);
+            // console.log(this.dataTableContainer);
         },
         //导出用户数据
         dowUserData(){
             this.$axios({
                 method: 'get',
-                url: 'http://42.192.152.16:8080/ssmTwo/downloadExclStore'
+                url: '/api/ssmTwo/downloadExclStore',
+                responseType: 'blob'
             }).then((res) => {
                 console.log(res);
+                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', '用户数据.xls');
+                document.body.appendChild(link);
+                link.click();
             },
             (err) =>{
-                console.log("err");
+                console.log(err);
             })
         },
 
@@ -104,7 +123,6 @@ export default{
         //按条件搜索用户数据
         async searchChange(item){
             console.log(item);
-            
             const res = await this.$axios({
                 method: 'get',
                 url: 'http://42.192.152.16:8080/ssmTwo/selectStore',
@@ -115,7 +133,7 @@ export default{
                     phoneNum: item.userPhone,
                     storeAccount: item.userAccount,
                     startTime: item.begin_time,
-                    endTime: item.end_time
+                    endTime: item.end_time,
                 },
             });
             if(res.data.count == 0){

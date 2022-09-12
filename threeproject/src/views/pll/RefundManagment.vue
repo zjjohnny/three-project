@@ -5,7 +5,7 @@
         </div>
         <!-- <RefundNav></RefundNav> -->
         <OrderNav :navList="navList" :nav_active="nav_active" :activeChange="activeChange" path="/RefundManagment"></OrderNav>
-        <router-view></router-view>
+        <router-view> </router-view>
     </div>
 </template>
 
@@ -28,6 +28,10 @@ export default{
         activeChange(i){
 			this.nav_active = i;
 		},
+        
+    },
+    created(){
+        // this.getRefundData()    
     }
 }
 </script>

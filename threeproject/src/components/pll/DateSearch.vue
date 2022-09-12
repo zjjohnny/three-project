@@ -62,17 +62,17 @@ export default{
         },
         // 搜索用户数据
         searchOrder(){
-            // console.log(this.searchInfo,this.userDate != null);
+            console.log(this.searchInfo,this.userDate != null);
             if(this.searchInfo.userName == '' && this.searchInfo.userAccount == '' && this.searchInfo.userPhone == '' && this.userDate == null){
                 alert("请输入搜索信息")
             }else{
-                if(this.userDate != null){
+                if(this.userDate == null || this.userDate == ''){
+                    this.searchInfo.begin_time = null;
+                    this.searchInfo.end_time = null
+                }else if(this.userDate != ''){
                     console.log(this.userDate);
                     this.searchInfo.begin_time = this.filterTime(this.userDate[0]);
                     this.searchInfo.end_time = this.filterTime(this.userDate[1])
-                }else{
-                    this.searchInfo.begin_time = null;
-                    this.searchInfo.end_time = null
                 }
                 this.$emit('searchChange',this.searchInfo)
             }

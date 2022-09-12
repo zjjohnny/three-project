@@ -2,7 +2,7 @@
     <div>
         <ul class="orderNav">
             <li v-for="(item,i) in navList" :key="i" @click="activeChange(i)">
-              <router-link :to="{ path: path, query:{state: item}}" 
+              <router-link :to="{ path: path, query:{state: i}}" 
               :class="i == nav_active ? 'nav_active' : ''" >{{item}}</router-link>
             </li>
             <!-- // <li>
@@ -22,7 +22,7 @@ export default{
     props: ['navList','nav_active','activeChange','path'],
     date(){
       return{
-       
+        
       }
     },
     methods:{

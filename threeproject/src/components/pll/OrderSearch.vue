@@ -25,15 +25,12 @@
                     <el-date-picker size="mini"
                     v-model="searchInfo.dateVal"
                     type="datetimerange"
-                    :picker-options="pickerOptions"
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     align="right">
                     </el-date-picker>
                 </div>
-                <!-- 下单时间<el-input size="mini" v-model="searchInfo.orderStartTime" name="orderNum" placeholder="起始时间" class="search_input"/>—
-                <el-input size="mini" v-model="searchInfo.orderEndTime" name="orderBuyer" placeholder="结束时间" class="search_input"></el-input> -->
                 
                 <el-button type="primary" size="mini" @click="searchOrder">搜索</el-button>
 
@@ -52,12 +49,12 @@ export default{
                 inputNum: '',//订单编号
                 inputBuyer: '', //买家ID
                 inputGoodsName: '',//商品名称
-                orderStartTime: '',//下单时间筛选开始时间
-                orderEndTime: '',//结束时间
                 orderStateVal: '',//订单状态
                 orderPayVal: '',//付款方式
                 orderSourceVal: '',//订单来源
-                dateVal: '' //下单时间选择
+                dateVal: '', //下单时间选择
+                begin_time: '',
+                end_time: ''
             },
             orderState: [{   
                 value: '待付款',
@@ -91,41 +88,63 @@ export default{
                 }, {
                 value: '微信公众号',
             }],
-
-
-            pickerOptions: {
-                shortcuts: [{
-                    text: '最近一周',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近一个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近三个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }]
-                },
                 
             };
     },
     methods: {
         searchOrder(){
-            console.log(this.searchInfo);
+            console.log(this.searchInfo.dateVal);
+            if(this.searchInfo.inputNum == '' && this.searchInfo.inputBuyer == '' && this.searchInfo.inputGoodsName == ''
+             && this.searchInfo.orderStateVal == '' && this.searchInfo.orderPayVal == '' && this.searchInfo.orderSourceVal == '' && this.searchInfo.dateVal == ''){
+                alert("请输入搜索信息");
+            }else{
+                if(this.searchInfo.dateVal == null || this.searchInfo.dateVal == ''){
+                    this.searchInfo.begin_time = null;
+                    this.searchInfo.end_time = null;
+                    // console.log(this.searchInfo.end_time);
+                }else if(this.searchInfo.dateVal != ''){
+                    this.searchInfo.begin_time = this.filterTime(this.searchInfo.dateVal[0]);
+                    this.searchInfo.end_time = this.filterTime(this.searchInfo.dateVal[1]);
+                    console.log(this.searchInfo.begin_time);
+                    // console.log(this.filterTime2(this.searchInfo.begin_time));
+                }
+                if(this.searchInfo.inputBuyer == ''){this.searchInfo.inputBuyer = null}
+                if(this.searchInfo.inputGoodsName == ''){this.searchInfo.inputGoodsName = null}
+                if(this.searchInfo.orderSourceVal == ''){this.searchInfo.orderSourceVal = null}
+                if(this.searchInfo.inputNum == ''){this.searchInfo.inputNum = null}
+                if(this.searchInfo.orderPayVal == ''){this.searchInfo.orderPayVal = null}
+                if(this.searchInfo.orderStateVal == ''){this.searchInfo.orderStateVal = null}
+                this.$emit('searchinfo',this.searchInfo)
+            }
+        },
+        // 中国标准时间转换日期格式
+        filterTime(val) {
+            let date = new Date(val);
+            let y = date.getFullYear();
+            let m = date.getMonth() + 1;
+            m = m < 10 ? "0" + m : m;
+            let d = date.getDate();
+            d = d < 10 ? "0" + d : d;
+            let h = date.getHours();
+            h = h < 10 ? "0" + h : h;
+            let minute = date.getMinutes();
+            minute = minute < 10 ? "0" + minute : minute;
+            let s = date.getSeconds();
+            s = s < 10 ? "0" + s : s;
+            let time1 =  y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + s;
+
+            // 日期格式转时间戳
+            time1 = time1.replace(/-/g,'/');/// 将-替换成/，因为下面这个构造函数只支持/分隔的日期字符串
+            let date1 = new Date(time1); // 构造一个日期型数据，值为传入的字符串
+            let time = date1.getTime();
+            return time
+        },
+        // 日期格式转时间戳
+        filterTime2(val){
+            val = val.replace(/-/g,'/');/// 将-替换成/，因为下面这个构造函数只支持/分隔的日期字符串
+            let date = new Date(val); // 构造一个日期型数据，值为传入的字符串
+            let time = date.getTime()+'';
+            return time
         }
     }
 }
