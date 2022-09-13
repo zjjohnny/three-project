@@ -9,7 +9,6 @@
                     <el-date-picker size="mini"
                         v-model="searchTime"
                         type="datetimerange"
-                        :picker-options="pickerOptions"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
@@ -30,15 +29,15 @@
                         <td>15天后</td>
                         <td>30天后</td>
                     </tr>
-                    <tr class="table-contanier">
-                        <td>2021-10-20</td>
-                        <td>1000</td>
-                        <td class="bule_color">61.3%</td>
-                        <td class="bule_color">66.5%</td>
-                        <td class="bule_color">50.2%</td>
-                        <td class="bule_color">58.0%</td>
-                        <td class="bule_color">50.2%</td>
-                        <td class="bule_color">58.0%</td>
+                    <tr class="table-contanier" v-for="item in newData">
+                        <td>{{item.time}}</td>
+                        <td>{{item.active_user}}</td>
+                        <td class="bule_color">{{item.one_day}}</td>
+                        <td class="bule_color">{{item.two_day}}</td>
+                        <td class="bule_color">{{item.three_day}}</td>
+                        <td class="bule_color">{{item.four_day}}</td>
+                        <td class="bule_color">{{item.five_day}}</td>
+                        <td class="bule_color">{{item.six_day}}</td>
                     </tr>
                     
                 </table>
@@ -53,38 +52,107 @@ export default{
     data(){
         return{
             searchTime: '',
-            pickerOptions: {
-                shortcuts: [{
-                    text: '最近一周',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近一个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近三个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }]
-            },
+            tableData:[
+                {
+                    time: '2022-09-01',
+                    active_user: '1000',
+                    one_day: '60%',
+                    two_day: '55%',
+                    three_day: '54%',
+                    four_day: '59%',
+                    five_day: '66%',
+                    six_day: '70%'
+                },
+                {
+                    time: '2022-09-02',
+                    active_user: '600',
+                    one_day: '70%',
+                    two_day: '65%',
+                    three_day: '54%',
+                    four_day: '70%',
+                    five_day: '66%',
+                    six_day: '70%'
+                },
+                {
+                    time: '2022-09-03',
+                    active_user: '600',
+                    one_day: '60%',
+                    two_day: '55%',
+                    three_day: '66%',
+                    four_day: '69%',
+                    five_day: '69%',
+                    six_day: '70%'
+                },
+                {
+                    time: '2022-09-04',
+                    active_user: '1000',
+                    one_day: '60%',
+                    two_day: '59%',
+                    three_day: '60%',
+                    four_day: '66%',
+                    five_day: '65%',
+                    six_day: '67%'
+                },
+            ],
+            newData:[
+                {
+                    time: '2022-09-01',
+                    active_user: '1000',
+                    one_day: '60%',
+                    two_day: '55%',
+                    three_day: '54%',
+                    four_day: '59%',
+                    five_day: '66%',
+                    six_day: '70%'
+                },
+                {
+                    time: '2022-09-02',
+                    active_user: '600',
+                    one_day: '70%',
+                    two_day: '65%',
+                    three_day: '54%',
+                    four_day: '70%',
+                    five_day: '66%',
+                    six_day: '70%'
+                },
+                {
+                    time: '2022-09-03',
+                    active_user: '600',
+                    one_day: '60%',
+                    two_day: '55%',
+                    three_day: '66%',
+                    four_day: '69%',
+                    five_day: '69%',
+                    six_day: '70%'
+                },
+                {
+                    time: '2022-09-04',
+                    active_user: '1000',
+                    one_day: '60%',
+                    two_day: '59%',
+                    three_day: '60%',
+                    four_day: '66%',
+                    five_day: '65%',
+                    six_day: '67%'
+                },
+            ]
         }
     },
     methods:{
         searchOrder(){
             console.log(this.searchTime);
+            // let beginTime = new Date(this.searchTime[0]);
+            let beginTime = (this.searchTime[0]).getTime();
+            let endTime = (this.searchTime[1]).getTime();
+            let te = (new Date(this.tableData[0].time)).getTime();
+            this.newData = []
+            for(let i=0; i<this.tableData.length; i++){
+                if((new Date(this.tableData[i].time)).getTime() >= beginTime && (new Date(this.tableData[i].time)) <= endTime){
+                    this.newData.push(this.tableData[i])
+                }
+            }
+            // console.log(newData);
+            console.log(beginTime,endTime,te);
         },
     }
 }

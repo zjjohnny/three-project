@@ -1,22 +1,22 @@
 <template>
     <div>
         <div class="order-mgt-search">
-            订单编号<el-input size="mini" v-model="searchInfo.inputNum" name="orderNum" placeholder="订单编号" class="search_input"></el-input>
-            买家<el-input size="mini" v-model="searchInfo.inputBuyer" name="orderBuyer" placeholder="买家名称" class="search_input"></el-input>
+            订单编号：<el-input size="mini" v-model="searchInfo.inputNum" name="orderNum" placeholder="订单编号" class="search_input"></el-input>
+            买家：<el-input size="mini" v-model="searchInfo.inputBuyer" name="orderBuyer" placeholder="买家名称" class="search_input"></el-input>
             商品名称<el-input size="mini" v-model="searchInfo.inputGoodsName" name="orderName" placeholder="商品名称" class="search_input"></el-input>
             订单状态
-            <el-select size="mini" v-model="searchInfo.orderStateVal" placeholder="全部状态" class="search_input">
+            <el-select size="mini" v-model="orderStateVal" placeholder="全部状态" class="search_input">
                 <el-option v-for="item in orderState" :key="item.value" :label="item.value" :value="item.value" />
             </el-select>
-        
+            
             <div class="payfor">
-                    付款方式
-                <el-select size="mini" v-model="searchInfo.orderPayVal" placeholder="全部" class="search_input">
+                付款方式：
+                <el-select size="mini" v-model="orderPayVal" placeholder="全部" class="search_input">
                     <el-option size="mini" v-for="item in orderPay" :key="item.value" :label="item.value" :value="item.value" />
                 </el-select>
             
-                订单来源
-                <el-select size="mini" v-model="searchInfo.orderSourceVal" placeholder="全部" class="search_input">
+                订单来源：
+                <el-select size="mini" v-model="orderSourceVal" placeholder="全部" class="search_input">
                     <el-option size="mini" v-for="item in orderSource" :key="item.value" :label="item.value" :value="item.value" />
                 </el-select>
         
@@ -56,6 +56,9 @@ export default{
                 begin_time: '',
                 end_time: ''
             },
+            orderSourceVal: '',//订单来源
+            orderStateVal: '',//订单状态
+            orderPayVal: '',//付款方式
             orderState: [{   
                 value: '待付款',
                 }, {
@@ -93,27 +96,60 @@ export default{
     },
     methods: {
         searchOrder(){
-            console.log(this.searchInfo.dateVal);
+            // console.log(this.searchInfo.dateVal);
             if(this.searchInfo.inputNum == '' && this.searchInfo.inputBuyer == '' && this.searchInfo.inputGoodsName == ''
-             && this.searchInfo.orderStateVal == '' && this.searchInfo.orderPayVal == '' && this.searchInfo.orderSourceVal == '' && this.searchInfo.dateVal == ''){
+             && this.orderStateVal == '' && this.orderPayVal == '' && this.orderSourceVal == '' && this.searchInfo.dateVal == ''){
                 alert("请输入搜索信息");
             }else{
                 if(this.searchInfo.dateVal == null || this.searchInfo.dateVal == ''){
                     this.searchInfo.begin_time = null;
                     this.searchInfo.end_time = null;
-                    // console.log(this.searchInfo.end_time);
                 }else if(this.searchInfo.dateVal != ''){
                     this.searchInfo.begin_time = this.filterTime(this.searchInfo.dateVal[0]);
                     this.searchInfo.end_time = this.filterTime(this.searchInfo.dateVal[1]);
-                    console.log(this.searchInfo.begin_time);
-                    // console.log(this.filterTime2(this.searchInfo.begin_time));
                 }
                 if(this.searchInfo.inputBuyer == ''){this.searchInfo.inputBuyer = null}
                 if(this.searchInfo.inputGoodsName == ''){this.searchInfo.inputGoodsName = null}
-                if(this.searchInfo.orderSourceVal == ''){this.searchInfo.orderSourceVal = null}
                 if(this.searchInfo.inputNum == ''){this.searchInfo.inputNum = null}
-                if(this.searchInfo.orderPayVal == ''){this.searchInfo.orderPayVal = null}
-                if(this.searchInfo.orderStateVal == ''){this.searchInfo.orderStateVal = null}
+                if(this.orderSourceVal == ''){
+                    this.searchInfo.orderSourceVal = null
+                }else if(this.orderSourceVal == 'PC端'){
+                    this.searchInfo.orderSourceVal = 1
+                }else if(this.orderSourceVal == 'APP端'){
+                    this.searchInfo.orderSourceVal = 2
+                }else if(this.orderSourceVal == '微信公众号'){
+                    this.searchInfo.orderSourceVal = 3
+                }
+                if(this.orderPayVal == ''){
+                    this.searchInfo.orderPayVal = null
+                }else if(this.orderPayVal == '微信支付'){
+                    this.searchInfo.orderPayVal = 1
+                }
+                else if(this.orderPayVal == '支付宝支付'){
+                    this.searchInfo.orderPayVal = 2
+                }else if(this.orderPayVal == '银联支付'){
+                    this.searchInfo.orderPayVal = 3
+                }else if(this.orderPayVal == '找人代付'){
+                    this.searchInfo.orderPayVal = 4
+                }else if(this.orderPayVal == '账户余额支付'){
+                    this.searchInfo.orderPayVal = 5
+                }
+                if(this.orderStateVal == ''){
+                    this.searchInfo.orderStateVal = null
+                }else if(this.orderStateVal == '待付款'){
+                    this.searchInfo.orderStateVal = 1
+                }else if(this.orderStateVal == '待发货'){
+                    this.searchInfo.orderStateVal = 2
+                }else if(this.orderStateVal == '待收货'){
+                    this.searchInfo.orderStateVal = 3
+                }else if(this.orderStateVal == '已完成'){
+                    this.searchInfo.orderStateVal = 4
+                }else if(this.orderStateVal == '已取消'){
+                    this.searchInfo.orderStateVal = 5
+                }else if(this.orderStateVal == '待评价'){
+                    this.searchInfo.orderStateVal = 6
+                }
+                console.log(this.searchInfo);
                 this.$emit('searchinfo',this.searchInfo)
             }
         },
@@ -134,18 +170,11 @@ export default{
             let time1 =  y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + s;
 
             // 日期格式转时间戳
-            time1 = time1.replace(/-/g,'/');/// 将-替换成/，因为下面这个构造函数只支持/分隔的日期字符串
-            let date1 = new Date(time1); // 构造一个日期型数据，值为传入的字符串
-            let time = date1.getTime();
-            return time
+            // time1 = time1.replace(/-/g,'/');/// 将-替换成/，因为下面这个构造函数只支持/分隔的日期字符串
+            // let date1 = new Date(time1); // 构造一个日期型数据，值为传入的字符串
+            // let time = date1.getTime();
+            return time1
         },
-        // 日期格式转时间戳
-        filterTime2(val){
-            val = val.replace(/-/g,'/');/// 将-替换成/，因为下面这个构造函数只支持/分隔的日期字符串
-            let date = new Date(val); // 构造一个日期型数据，值为传入的字符串
-            let time = date.getTime()+'';
-            return time
-        }
     }
 }
 </script>
