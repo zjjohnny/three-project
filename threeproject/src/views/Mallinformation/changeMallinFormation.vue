@@ -109,11 +109,12 @@ export default {
           phoneNumber: this.phone,
           email: this.email,
           code1: this.datacodess,
-          accountId: this.id,
+          // accountId: this.id,
         };
         const obj2 = JSON.stringify(obj);
         const res = await this.$axios.updateMallmes(obj);
-        if (res.data.code == 0) {
+        console.log(res);
+        if (res.code === 0) {
           this.$message({
             message: "修改成功",
             type: "success",
@@ -132,6 +133,7 @@ export default {
       try {
         const res = await this.$axios.getcode();
         if (res.code === 0) {
+          
           this.datacodess = res.data.code;
           //三秒把值给验证码
           (this.phoenuber = this.datacodess), (this.getmesdata = res.data);
