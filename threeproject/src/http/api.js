@@ -51,5 +51,16 @@ export const server = {
   // 图片上传的接口
   uploadimg(data){
     return filePost('/goods/imageUpload',data)
+  },
+  getMallmes(data){
+    return fetch('/ssmTwo/Mall/queryShopMark',data)
+  },
+  // 修改商城联系人接口
+  updateMallmes(data){
+    return fetch('/ssmTwo/Mall/UpdateMall',data)
+  },
+  // 验证吗接口
+  getcode(data){
+    return fetch('/ssmTwo/Mall/getYZMall',data)
   }
 }

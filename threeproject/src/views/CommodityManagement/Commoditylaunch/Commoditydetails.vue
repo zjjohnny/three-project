@@ -419,7 +419,7 @@ export default {
   height: 150px;
   display: block;
   position: absolute;
-  left: 35%;
-  top: 63%;
+  left: 40%;
+  top: 59%;
 }
 </style>

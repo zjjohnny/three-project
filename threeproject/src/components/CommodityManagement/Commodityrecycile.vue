@@ -53,7 +53,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55"> </el-table-column>
-        <el-table-column prop="goodsName" label="商品名称" width="250">
+        <el-table-column prop="goodsName" label="商品名称" width="160">
         </el-table-column>
         <el-table-column prop="image" label="商品图片" width="160" >
           <template slot-scope="scope">

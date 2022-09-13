@@ -15,8 +15,18 @@
       </div>
       <div class="phonte">
         <span>新手机:</span
-        ><el-input v-model="phone" placeholder="请输入内容" class="inputa"></el-input>
-        <el-button type="primary" plain>获取验证码</el-button>
+        ><el-input
+          v-model="phone"
+          placeholder="请输入内容"
+          class="inputa"
+        ></el-input>
+        <el-button
+          type="primary"
+          plain
+          @click="getcodes"
+          :disabled="ischecked"
+          >{{ gtemes }}</el-button
+        >
       </div>
       <div>
         <span>验证码:</span
@@ -40,19 +50,105 @@
 export default {
   data() {
     return {
+      id: "",
       name: "",
       phone: "",
       phoenuber: "",
       email: "",
+      ischecked: false, //没有点击
+      gtemes: "获取验证码",
+      getmesdata: "",
+      datacodess: "",
     };
   },
+  mounted() {
+    const router = this.$route.query;
+    this.id = router.id;
+    this.name = router.name;
+    this.phone = router.phone;
+    this.email = router.email;
+  },
   methods: {
-    submit() {},
-    putoff(){
+    submit() {
+      // 做正则判断
+      if (this.name == "") {
+        this.$message.error("请输入联系人姓名");
+        return;
+      }
+      if (this.phone == "") {
+        this.$message.error("请输入手机号");
+        return;
+      }
+      if (this.phoenuber == "") {
+        this.$message.error("请输入验证码");
+        return;
+      }
+      if (this.email == "") {
+        this.$message.error("请输入邮箱");
+        return;
+      }
+      this.changename();
+
+      // 三秒后跳转
+    },
+    putoff() {
       this.$router.push({
         path: "/",
       });
-    }
+    },
+    getcodes() {
+      this.ischecked = true;
+      this.getcode();
+    },
+    // 修改联系人接口
+    async changename() {
+      try {
+        const obj = {
+          id: this.id,
+          name: this.name,
+          phoneNumber: this.phone,
+          email: this.email,
+          code1: this.datacodess,
+          accountId: this.id,
+        };
+        const obj2 = JSON.stringify(obj);
+        const res = await this.$axios.updateMallmes(obj);
+        if (res.data.code == 0) {
+          this.$message({
+            message: "修改成功",
+            type: "success",
+          });
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 3000);
+        }
+      } catch (err) {
+        alert(err);
+      }
+    },
+
+    // 获取验证码接口
+    async getcode() {
+      try {
+        const res = await this.$axios.getcode();
+        if (res.code === 0) {
+          this.datacodess = res.data.code;
+          //三秒把值给验证码
+          (this.phoenuber = this.datacodess), (this.getmesdata = res.data);
+          this.gtemes = 60;
+          var time = setInterval(() => {
+            this.gtemes = this.gtemes - 1;
+            if (this.gtemes === 0) {
+              clearInterval(time);
+              this.gtemes = "获取验证码";
+              this.ischecked = false;
+            }
+          }, 1000);
+        }
+      } catch (err) {
+        alert(err);
+      }
+    },
   },
 };
 </script>
@@ -103,12 +199,12 @@ export default {
     }
   }
 }
-.inputa{
+.inputa {
   width: calc(100% - 120px);
   margin-right: 10px;
 }
 
-.btnitem{
+.btnitem {
   width: 1120px;
 
   // margin: 30px auto;

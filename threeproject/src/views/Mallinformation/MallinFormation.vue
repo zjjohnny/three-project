@@ -8,7 +8,10 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>联系人信息</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="change"
+            <el-button
+              style="float: right; padding: 3px 0"
+              type="text"
+              @click="change"
               >修改联系人信息</el-button
             >
           </div>
@@ -31,9 +34,20 @@
       <div>
         <h5>经营类目行业资质</h5>
         <el-table :data="AllData" style="width: 100%">
-          <el-table-column prop="name" label="类目名称"> </el-table-column>
-          <el-table-column prop="goodsname" label="资质名称"> </el-table-column>
-          <el-table-column prop="text" label="资质电子版"> </el-table-column>
+          <el-table-column prop="rtName" label="类目名称"> </el-table-column>
+          <el-table-column prop="qualification" label="资质名称">
+          </el-table-column>
+          <el-table-column prop="quaImg" label="资质电子版">
+            <template slot-scope="scope">
+              <el-popover placement="top-start" title="" trigger="hover">
+                <img
+                  :src="scope.row.quaImg"
+                  alt=""
+                  style="width: 150px; height: 150px"
+                />
+              </el-popover>
+            </template>
+          </el-table-column>
           <el-table-column prop="date" label="有效期"> </el-table-column>
         </el-table>
       </div>
@@ -78,20 +92,61 @@ export default {
         { id: 6, name: "法人身份证号", content: "" },
         { id: 7, name: "法人身份证", content: "" },
       ],
-      AllData: [
-        {
-          name: "考试费1",
-          goodsname: 2001,
-          text: "200",
-          date: "2020-10-10",
-        },
-      ],
+      AllData: [],
     };
   },
+  mounted() {
+    this.init();
+  },
   methods: {
-    change(){
-      this.$router.push('/changeinformation')
-    }
+    change() {
+      this.$router.push({
+        path: "/changeinformation",
+        query: {
+          id: 1,
+          name: this.carddata[0].content,
+          phone: this.carddata[1].content,
+          email: this.carddata[2].content,
+        },
+      });
+    },
+    init() {
+      this.getlist();
+    },
+
+    // 获取信息
+    async getlist() {
+      try {
+        const res = await this.$axios.getMallmes();
+        if (res.code === 0) {
+          console.log("%c ======>>>>>>>>", "color:orange;", res.data);
+          const datass = res.data.shop.runType;
+          const datas = res.data;
+          this.carddata[0].content = datas.name;
+          this.carddata[1].content = datas.phoneNumber;
+          this.carddata[2].content = datas.email;
+          this.carddata2[0].content = datas.shop.shopName;
+          this.carddata2[1].content = datas.shop.shopLevel;
+          this.carddata2[2].content = datas.shop.runType.rtName;
+          this.carddata3[0].content = datas.shop.firm.firName;
+          this.carddata3[1].content = datas.shop.firm.firNumCode;
+          this.carddata3[2].content = datas.shop.firm.legalImg; //营业执照
+          this.carddata3[3].content = datas.shop.firm.firLocation;
+          this.carddata3[4].content = datas.shop.firm.legalName;
+          this.carddata3[5].content = datas.shop.firm.legalNum;
+          this.carddata3[6].content = datas.shop.firm.scImg;
+          this.AllData.push({
+            rtName: datass.rtName,
+            qualification: datass.qualification,
+            quaImg:
+              "http://42.192.152.16:8080/" + "getImage/" + datass.quaImg,
+            date: datass.beginTime + "至" + datass.endTime,
+          }); //法人身份证
+        }
+      } catch (err) {
+        console.log("%c ======>>>>>>>>", "color:orange;", err);
+      }
+    },
   },
 };
 </script>
