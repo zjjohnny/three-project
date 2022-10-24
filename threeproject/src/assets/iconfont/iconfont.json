@@ -1,0 +1,72 @@
+{
+  "id": "3651735",
+  "name": "crmproject",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "31819591",
+      "name": "安全-线",
+      "font_class": "anquan-xian",
+      "unicode": "e897",
+      "unicode_decimal": 59543
+    },
+    {
+      "icon_id": "31819600",
+      "name": "安装记录-线",
+      "font_class": "anzhuangjilu-xian",
+      "unicode": "e898",
+      "unicode_decimal": 59544
+    },
+    {
+      "icon_id": "31819604",
+      "name": "采购-线",
+      "font_class": "caigou-xian",
+      "unicode": "e899",
+      "unicode_decimal": 59545
+    },
+    {
+      "icon_id": "31819608",
+      "name": "仓库调拨-线",
+      "font_class": "cangkutiaobo-xian",
+      "unicode": "e89a",
+      "unicode_decimal": 59546
+    },
+    {
+      "icon_id": "31819624",
+      "name": "采购申请-线",
+      "font_class": "caigoushenqing-xian",
+      "unicode": "e89b",
+      "unicode_decimal": 59547
+    },
+    {
+      "icon_id": "31819644",
+      "name": "管理者-线",
+      "font_class": "guanlizhe-xian",
+      "unicode": "e89c",
+      "unicode_decimal": 59548
+    },
+    {
+      "icon_id": "31819678",
+      "name": "多人-线",
+      "font_class": "duoren-xian",
+      "unicode": "e89d",
+      "unicode_decimal": 59549
+    },
+    {
+      "icon_id": "31819764",
+      "name": "提醒通知-线",
+      "font_class": "tixingtongzhi-xian",
+      "unicode": "e89e",
+      "unicode_decimal": 59550
+    },
+    {
+      "icon_id": "31819780",
+      "name": "现场勘探-线",
+      "font_class": "xianchangkantan-xian",
+      "unicode": "e89f",
+      "unicode_decimal": 59551
+    }
+  ]
+}
